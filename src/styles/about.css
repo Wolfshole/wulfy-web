@@ -1,0 +1,51 @@
+section.navigation {
+    background: fixed var(--nav-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+nav li {
+    margin: 0;
+}
+
+nav a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+nav a:hover {
+    background-color: var(--nav-hover);
+}
+
+/* Welcome Section */
+
+section.welcome {
+    padding: 40px;
+    background-color: var(--welcome-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+section.welcome h1 {
+    color: var(--welcome-title);
+    margin-bottom: 20px;
+}
+
+section.welcome p {
+    color: var(--welcome-text);
+    font-size: 18px;
+    line-height: 1.6;
+}
+

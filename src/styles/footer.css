@@ -1,0 +1,28 @@
+footer {
+    background: rgba(0,0,0,0.9);
+    color: #ddd;
+    border-top: 2px solid #ff4500;
+    padding: 40px 20px;
+}
+
+.footer-container {
+    display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+max-width: 1200px;
+margin: 0 auto;
+gap: 30px;
+}
+
+.footer-column h4 {
+color: #ff7518;
+margin-bottom: 15px;
+}
+
+.footer-bottom {
+text-align: center;
+padding-top: 20px;
+border-top: 1px solid #ff4500;
+font-size: 0.85em;
+color: #aaa;
+}

@@ -1,0 +1,123 @@
+/* Nachtmodus CSS Variablen */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --header-bg: #f5f5f5;
+    --footer-bg: #f0f0f0;
+    --link-color: #0066cc;
+    --link-hover-color: #004499;
+    --button-bg: #0066cc;
+    --button-text: #ffffff;
+    --nav-hover: #e8e8e8;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --header-bg: #2a2a2a;
+    --footer-bg: #252525;
+    --link-color: #66b3ff;
+    --link-hover-color: #99ccff;
+    --button-bg: #4da6ff;
+    --button-text: #1a1a1a;
+    --nav-hover: #3a3a3a;
+}
+
+/* Basis Styles */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: var(--header-bg);
+    padding: 20px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+nav li {
+    margin: 0;
+}
+
+nav a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+nav a:hover {
+    background-color: var(--nav-hover);
+    color: var(--link-hover-color);
+}
+
+/* Night Mode Button */
+#nightModeBtn {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#nightModeBtn:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+#nightModeBtn:active {
+    transform: scale(0.95);
+}
+
+/* Footer */
+.footer-container {
+    background-color: var(--footer-bg);
+    padding: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.footer-column h4 {
+    color: var(--text-color);
+}
+
+.footer-column a {
+    color: var(--link-color);
+    transition: color 0.3s ease;
+    text-decoration: underline;
+}
+
+.footer-column a:hover {
+    color: var(--link-hover-color);
+}
+
+/* Welcome Section */
+#welcome {
+    padding: 20px;
+}
+
+#welcome h1 {
+    color: var(--text-color);
+}
+
+#welcome p {
+    color: var(--text-color);
+    line-height: 1.6;
+}
