@@ -28,6 +28,40 @@ nav a:hover {
     background-color: var(--nav-hover);
 }
 
+/* Auth Buttons */
+.btn-login,
+.btn-register {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-login {
+    background: #4a90e2;
+    color: white;
+}
+
+.btn-login:hover {
+    background: #357abd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+.btn-register {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-register:hover {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
 /* Welcome Section */
 
 section.welcome {

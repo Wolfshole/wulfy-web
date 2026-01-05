@@ -1,0 +1,76 @@
+---
+import "../styles/auth.css";
+import "../styles/nightmode.css";
+---
+
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Login - Wulfy</title>
+  </head>
+
+  <body>
+	<header>
+	  <section class="navigation">
+		<nav>
+		  <ul>
+			<li><a href="/">Startseite</a></li>
+			<li><a href="/about">Über mich</a></li>
+			<li><a href="/projects">Projekte</a></li>
+			<li><button id="nightModeBtn">Night Mode</button></li>
+		  </ul>
+		</nav>
+	  </section>
+	</header>
+
+	<main class="auth-container">
+	  <div class="auth-box">
+		<h1>Anmelden</h1>
+		
+		<div id="error-message" class="error-message" style="display: none;"></div>
+		<div id="success-message" class="success-message" style="display: none;"></div>
+
+		<form id="login-form" class="auth-form">
+		  <div class="form-group">
+			<label for="username">Benutzername oder E-Mail</label>
+			<input 
+			  type="text" 
+			  id="username" 
+			  name="username" 
+			  required 
+			  autocomplete="username"
+			/>
+		  </div>
+
+		  <div class="form-group">
+			<label for="password">Passwort</label>
+			<input 
+			  type="password" 
+			  id="password" 
+			  name="password" 
+			  required 
+			  autocomplete="current-password"
+			/>
+		  </div>
+
+		  <div class="form-group checkbox-group">
+			<input type="checkbox" id="remember" name="remember" />
+			<label for="remember">Angemeldet bleiben</label>
+		  </div>
+
+		  <button type="submit" class="btn-primary">Anmelden</button>
+		</form>
+
+		<div class="auth-links">
+		  <p>Noch kein Konto? <a href="/register">Jetzt registrieren</a></p>
+		  <p><a href="/forgot-password">Passwort vergessen?</a></p>
+		</div>
+	  </div>
+	</main>
+
+	<script src="../scripts/nightmode.js"></script>
+	<script src="../scripts/auth.js"></script>
+  </body>
+</html>

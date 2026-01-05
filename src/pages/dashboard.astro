@@ -1,0 +1,65 @@
+---
+import "../styles/dashboard.css";
+import "../styles/nightmode.css";
+---
+
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Dashboard - Wulfy</title>
+  </head>
+
+  <body>
+	<header>
+	  <section class="navigation">
+		<nav>
+		  <ul>
+			<li><a href="/">Startseite</a></li>
+			<li><a href="/about">Über mich</a></li>
+			<li><a href="/projects">Projekte</a></li>
+			<li><a href="/dashboard" class="active">Dashboard</a></li>
+			<li><button id="nightModeBtn">Night Mode</button></li>
+			<li><button id="logout-btn">Abmelden</button></li>
+		  </ul>
+		</nav>
+	  </section>
+	</header>
+
+	<main class="dashboard-container">
+	  <div class="dashboard-header">
+		<h1>Willkommen, <span id="user-name">Benutzer</span>! 👋</h1>
+		<p>Du bist erfolgreich angemeldet.</p>
+	  </div>
+
+	  <div class="dashboard-content">
+		<div class="dashboard-card">
+		  <h2>Dein Profil</h2>
+		  <div id="user-info">
+			<p><strong>Benutzername:</strong> <span id="profile-username">-</span></p>
+			<p><strong>E-Mail:</strong> <span id="profile-email">-</span></p>
+			<p><strong>Registriert seit:</strong> <span id="profile-registered">-</span></p>
+		  </div>
+		</div>
+
+		<div class="dashboard-card">
+		  <h2>Schnellzugriff</h2>
+		  <ul class="quick-links">
+			<li><a href="/projects">Meine Projekte</a></li>
+			<li><a href="/settings">Einstellungen</a></li>
+			<li><a href="/profile">Profil bearbeiten</a></li>
+		  </ul>
+		</div>
+
+		<div class="dashboard-card">
+		  <h2>Neuigkeiten</h2>
+		  <p style="color: #666; line-height: 1.6;">Hier werden in Zukunft Updates und Neuigkeiten angezeigt. Bleib dran für neue Features und Ankündigungen! 🚀</p>
+		</div>
+	  </div>
+	</main>
+
+	<script src="../scripts/nightmode.js"></script>
+	<script src="../scripts/dashboard.js"></script>
+  </body>
+</html>
