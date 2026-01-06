@@ -42,6 +42,20 @@ const AuthStorage = {
   userExists(username, email) {
     const users = this.getUsers();
     return users.some(u => u.username === username || u.email === email);
+  },
+  
+  isAdmin() {
+    const user = this.getUser();
+    return user ? user.isAdmin === true : false;
+  },
+  
+  // Admin-Benutzerliste (diese Benutzernamen haben Admin-Rechte)
+  adminUsernames: ['Wulfy', 'UEBlackWulfGHG', 'ueblackwulf', 'ueblackwolf'],
+  
+  checkIfAdmin(username) {
+    return this.adminUsernames.some(admin => 
+      admin.toLowerCase() === username.toLowerCase()
+    );
   }
 };
 
@@ -79,12 +93,26 @@ if (loginForm) {
     const user = AuthStorage.findUser(username, password);
     
     if (user) {
-      // Login erfolgreich
+      // Login erfolgreich - Admin-Status prüfen und aktualisieren
+      const isAdmin = AuthStorage.checkIfAdmin(user.username);
+      
+      // Admin-Status im gespeicherten Benutzer aktualisieren, falls nicht vorhanden
+      if (isAdmin && !user.isAdmin) {
+        const users = AuthStorage.getUsers();
+        const userIndex = users.findIndex(u => u.username === user.username);
+        if (userIndex !== -1) {
+          users[userIndex].isAdmin = true;
+          localStorage.setItem('registeredUsers', JSON.stringify(users));
+        }
+      }
+      
       const userData = {
         username: user.username,
         email: user.email,
         registeredDate: user.registeredDate,
-        rememberMe: remember
+        rememberMe: remember,
+        isAdmin: isAdmin,
+        profilePicture: user.profilePicture // Profilbild beibehalten
       };
       
       AuthStorage.setUser(userData);
@@ -152,11 +180,13 @@ if (registerForm) {
     }
     
     // Neuen Benutzer erstellen
+    const isAdmin = AuthStorage.checkIfAdmin(username);
     const newUser = {
       username: username,
       email: email,
       password: password, // In einer echten Anwendung: NIEMALS Passwort im Klartext speichern!
-      registeredDate: new Date().toISOString()
+      registeredDate: new Date().toISOString(),
+      isAdmin: isAdmin
     };
     
     AuthStorage.addUser(newUser);

@@ -19,9 +19,11 @@ import "../styles/nightmode.css";
 			<li><a href="/">Startseite</a></li>
 			<li><a href="/about">Über mich</a></li>
 			<li><a href="/projects">Projekte</a></li>
-			<li><a href="/dashboard" class="active">Dashboard</a></li>
+			<li><a href="/faq">FAQ</a></li>
 			<li><button id="nightModeBtn">Night Mode</button></li>
-			<li><button id="logout-btn">Abmelden</button></li>
+			<li><a href="/dashboard" class="active">📊 Dashboard</a></li>
+			<li><a href="/profile" class="btn-login">👤 Profil</a></li>
+			<li><button id="logout-btn" class="btn-register">Abmelden</button></li>
 		  </ul>
 		</nav>
 	  </section>
@@ -29,37 +31,239 @@ import "../styles/nightmode.css";
 
 	<main class="dashboard-container">
 	  <div class="dashboard-header">
-		<h1>Willkommen, <span id="user-name">Benutzer</span>! 👋</h1>
-		<p>Du bist erfolgreich angemeldet.</p>
+		<h1>👑 Admin Dashboard - Willkommen, <span id="user-name">Admin</span>!</h1>
+		<p>Verwaltungszentrale für deine Webseite</p>
+	  </div>
+
+	  <!-- Admin Statistiken -->
+	  <div class="admin-stats">
+		<div class="stat-card">
+		  <div class="stat-icon">👥</div>
+		  <div class="stat-info">
+			<h3 id="total-users">0</h3>
+			<p>Registrierte Benutzer</p>
+		  </div>
+		</div>
+		<div class="stat-card">
+		  <div class="stat-icon">👑</div>
+		  <div class="stat-info">
+			<h3 id="total-admins">0</h3>
+			<p>Administratoren</p>
+		  </div>
+		</div>
+		<div class="stat-card">
+		  <div class="stat-icon">🌐</div>
+		  <div class="stat-info">
+			<h3 id="site-status">Online</h3>
+			<p>Status der Seite</p>
+		  </div>
+		</div>
+		<div class="stat-card">
+		  <div class="stat-icon">📅</div>
+		  <div class="stat-info">
+			<h3 id="current-date">-</h3>
+			<p>Aktuelles Datum</p>
+		  </div>
+		</div>
 	  </div>
 
 	  <div class="dashboard-content">
-		<div class="dashboard-card">
-		  <h2>Dein Profil</h2>
-		  <div id="user-info">
-			<p><strong>Benutzername:</strong> <span id="profile-username">-</span></p>
-			<p><strong>E-Mail:</strong> <span id="profile-email">-</span></p>
-			<p><strong>Registriert seit:</strong> <span id="profile-registered">-</span></p>
+		<!-- Content-Verwaltung -->
+		<div class="dashboard-card admin-card full-width">
+		  <h2>📝 Inhalte verwalten</h2>
+		  <div class="content-tabs">
+			<button class="tab-btn active" data-tab="faq">FAQ</button>
+			<button class="tab-btn" data-tab="projects">Projekte</button>
+			<button class="tab-btn" data-tab="announcements">Ankündigungen</button>
+		  </div>
+
+		  <!-- FAQ Verwaltung -->
+		  <div class="tab-content active" id="tab-faq">
+			<div class="content-header">
+			  <h3>FAQ-Einträge</h3>
+			  <button class="btn-primary" onclick="openAddModal('faq')">+ FAQ hinzufügen</button>
+			</div>
+			<div class="content-list" id="faq-list">
+			  <!-- FAQ-Liste wird hier dynamisch eingefügt -->
+			</div>
+		  </div>
+
+		  <!-- Projekte Verwaltung -->
+		  <div class="tab-content" id="tab-projects">
+			<div class="content-header">
+			  <h3>Projekt-Einträge</h3>
+			  <button class="btn-primary" onclick="openAddModal('project')">+ Projekt hinzufügen</button>
+			</div>
+			<div class="content-list" id="projects-list">
+			  <!-- Projektliste wird hier dynamisch eingefügt -->
+			</div>
+		  </div>
+
+		  <!-- Ankündigungen Verwaltung -->
+		  <div class="tab-content" id="tab-announcements">
+			<div class="content-header">
+			  <h3>Ankündigungen</h3>
+			  <button class="btn-primary" onclick="openAddModal('announcement')">+ Ankündigung hinzufügen</button>
+			</div>
+			<div class="content-list" id="announcements-list">
+			  <!-- Ankündigungen werden hier dynamisch eingefügt -->
+			</div>
 		  </div>
 		</div>
 
-		<div class="dashboard-card">
-		  <h2>Schnellzugriff</h2>
-		  <ul class="quick-links">
-			<li><a href="/projects">Meine Projekte</a></li>
-			<li><a href="/settings">Einstellungen</a></li>
-			<li><a href="/profile">Profil bearbeiten</a></li>
-		  </ul>
+		<!-- Benutzerverwaltung -->
+		<div class="dashboard-card admin-card">
+		  <h2>👥 Benutzerverwaltung</h2>
+		  <div class="user-management">
+			<div class="user-controls">
+			  <button id="refresh-users-btn" class="btn-secondary">🔄 Aktualisieren</button>
+			  <div class="search-box">
+				<input type="text" id="user-search" placeholder="🔍 Benutzer suchen..." />
+			  </div>
+			</div>
+			<div class="users-list" id="users-list">
+			  <!-- Benutzerliste wird hier dynamisch eingefügt -->
+			</div>
+		  </div>
 		</div>
 
-		<div class="dashboard-card">
-		  <h2>Neuigkeiten</h2>
-		  <p style="color: #666; line-height: 1.6;">Hier werden in Zukunft Updates und Neuigkeiten angezeigt. Bleib dran für neue Features und Ankündigungen! 🚀</p>
+		<!-- System-Einstellungen -->
+		<div class="dashboard-card admin-card">
+		  <h2>⚙️ System-Einstellungen</h2>
+		  <div class="settings-group">
+			<div class="setting-item">
+			  <div class="setting-info">
+				<strong>Registrierung erlauben</strong>
+				<p>Neue Benutzer können sich registrieren</p>
+			  </div>
+			  <label class="switch">
+				<input type="checkbox" id="allow-registration" checked>
+				<span class="slider"></span>
+			  </label>
+			</div>
+			<div class="setting-item">
+			  <div class="setting-info">
+				<strong>Wartungsmodus</strong>
+				<p>Seite für Wartungsarbeiten sperren</p>
+			  </div>
+			  <label class="switch">
+				<input type="checkbox" id="maintenance-mode">
+				<span class="slider"></span>
+			  </label>
+			</div>
+			<div class="setting-item">
+			  <div class="setting-info">
+				<strong>Dark Mode Standard</strong>
+				<p>Dark Mode für neue Besucher aktiviert</p>
+			  </div>
+			  <label class="switch">
+				<input type="checkbox" id="default-dark-mode">
+				<span class="slider"></span>
+			  </label>
+			</div>
+		  </div>
+		  <button id="save-settings-btn" class="btn-primary">💾 Einstellungen speichern</button>
+		  <div id="settings-message" class="message" style="display: none;"></div>
+		</div>
+
+		<!-- Schnellaktionen -->
+		<div class="dashboard-card admin-card">
+		  <h2>⚡ Schnellaktionen</h2>
+		  <div class="quick-actions">
+			<button id="clear-cache-btn" class="action-btn">
+			  <span class="action-icon">🗑️</span>
+			  <span>Cache leeren</span>
+			</button>
+			<button id="export-users-btn" class="action-btn">
+			  <span class="action-icon">📥</span>
+			  <span>Benutzer exportieren</span>
+			</button>
+			<button id="backup-data-btn" class="action-btn">
+			  <span class="action-icon">💾</span>
+			  <span>Backup erstellen</span>
+			</button>
+			<button id="view-logs-btn" class="action-btn">
+			  <span class="action-icon">📋</span>
+			  <span>Logs anzeigen</span>
+			</button>
+		  </div>
+		</div>
+
+		<!-- Aktivitätslog -->
+		<div class="dashboard-card admin-card">
+		  <h2>📋 Letzte Aktivitäten</h2>
+		  <div class="activity-log" id="activity-log">
+			<!-- Aktivitäten werden hier dynamisch eingefügt -->
+		  </div>
 		</div>
 	  </div>
 	</main>
 
+	<!-- Modal für Inhalte hinzufügen/bearbeiten -->
+	<div id="content-modal" class="modal">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h2 id="modal-title">Inhalt hinzufügen</h2>
+		  <button class="modal-close" onclick="closeModal()">&times;</button>
+		</div>
+		<form id="content-form">
+		  <input type="hidden" id="content-type">
+		  <input type="hidden" id="content-id">
+		  
+		  <div id="form-fields">
+			<!-- Formularfelder werden dynamisch eingefügt -->
+		  </div>
+		  
+		  <div class="modal-footer">
+			<button type="button" class="btn-secondary" onclick="closeModal()">Abbrechen</button>
+			<button type="submit" class="btn-primary">Speichern</button>
+		  </div>
+		</form>
+	  </div>
+	</div>
+
+	<!-- Modal für Nutzer bearbeiten -->
+	<div id="user-modal" class="modal">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h2 id="user-modal-title">Nutzer bearbeiten</h2>
+		  <button class="modal-close" onclick="closeUserModal()">&times;</button>
+		</div>
+		<form id="user-form">
+		  <input type="hidden" id="edit-username">
+		  
+		  <div class="form-group">
+			<label for="edit-email">E-Mail-Adresse *</label>
+			<input type="email" id="edit-email" name="email" required>
+		  </div>
+		  
+		  <div class="form-group">
+			<label for="edit-password">Neues Passwort (optional)</label>
+			<input type="password" id="edit-password" name="password" placeholder="Leer lassen, um Passwort beizubehalten">
+		  </div>
+		  
+		  <div class="form-group">
+			<div class="setting-item" style="margin: 0;">
+			  <div class="setting-info">
+				<strong>Admin-Status</strong>
+				<p>Benutzer als Administrator festlegen</p>
+			  </div>
+			  <label class="switch">
+				<input type="checkbox" id="edit-is-admin">
+				<span class="slider"></span>
+			  </label>
+			</div>
+		  </div>
+		  
+		  <div class="modal-footer">
+			<button type="button" class="btn-secondary" onclick="closeUserModal()">Abbrechen</button>
+			<button type="submit" class="btn-primary">Speichern</button>
+		  </div>
+		</form>
+	  </div>
+	</div>
+
 	<script src="../scripts/nightmode.js"></script>
 	<script src="../scripts/dashboard.js"></script>
+	<script src="../scripts/content-management.js"></script>
   </body>
-</html>

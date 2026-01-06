@@ -1,0 +1,145 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <title>{title}</title>
+  <link rel="stylesheet" href="/src/styles/base.css">
+  <link rel="stylesheet" href="/src/styles/nightmode.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="/" class="logo">
+          <span class="logo-text">Wulfy</span>
+        </a>
+        
+        <button class="mobile-menu-toggle" aria-label="Menü öffnen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/about" class="nav-link">Über uns</a></li>
+          <li><a href="/projects" class="nav-link">Projekte</a></li>
+          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button id="theme-toggle" class="theme-toggle" aria-label="Theme wechseln">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          <a href="/login" class="btn btn-primary" id="auth-button">Login</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>Wulfy Web</h3>
+          <p>Ihre moderne Webplattform für Projekte und mehr.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">Über uns</a></li>
+            <li><a href="/projects">Projekte</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Rechtliches</h4>
+          <ul class="footer-links">
+            <li><a href="/datenschutz">Datenschutz</a></li>
+            <li><a href="/impressum">Impressum</a></li>
+            <li><a href="/agb">AGB</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Kontakt</h4>
+          <ul class="footer-links">
+            <li><a href="mailto:info@wulfy-web.de">info@wulfy-web.de</a></li>
+            <li><a href="/kontakt">Kontaktformular</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 Wulfy Web. Alle Rechte vorbehalten.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/src/scripts/nightmode.js"></script>
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+
+    mobileMenuToggle?.addEventListener('click', () => {
+      navMenu?.classList.toggle('active');
+      mobileMenuToggle?.classList.toggle('active');
+    });
+
+    // Auth Button Update
+    const authButton = document.getElementById('auth-button') as HTMLAnchorElement | null;
+    if (authButton) {
+      const user = localStorage.getItem('currentUser');
+      if (user) {
+        authButton.textContent = 'Logout';
+        authButton.href = '#';
+        authButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('currentUser');
+          window.location.href = '/';
+        });
+      }
+    }
+
+    // Active Link Highlighting
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>

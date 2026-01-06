@@ -26,3 +26,10 @@ border-top: 1px solid #ff4500;
 font-size: 0.85em;
 color: #aaa;
 }
+
+.copyright {
+margin-top: 10px;
+font-size: 0.8em;
+color: #666;
+text-align: center;
+}
