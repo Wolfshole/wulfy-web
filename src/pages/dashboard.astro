@@ -1,17 +1,10 @@
 ---
+import Base from "../layouts/Base.astro";
 import "../styles/dashboard.css";
 import "../styles/nightmode.css";
 ---
 
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Dashboard - Wulfy</title>
-  </head>
-
-  <body>
+<Base title="Dashboard - Wulfy">
 	<header>
 	  <section class="navigation">
 		<nav>
@@ -266,4 +259,4 @@ import "../styles/nightmode.css";
 	<script src="../scripts/nightmode.js"></script>
 	<script src="../scripts/dashboard.js"></script>
 	<script src="../scripts/content-management.js"></script>
-  </body>
+</Base>

@@ -1,17 +1,11 @@
 ---
+import Base from "../layouts/Base.astro";
 import "../styles/footer.css";
 import "../styles/nightmode.css";
 ---
 
-<!DOCTYPE html>
-<html lang="de">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Über mich</title> <!-- Später Über uns!!! -->
-    </head>
-    
-    <body>
+<Base title="Über mich">
+  <body>
         <header>
             <section class="navigation">
                 <nav>
@@ -82,4 +76,4 @@ import "../styles/nightmode.css";
         <script src="../scripts/nightmode.js"></script>
         <script src="../scripts/navigation.js"></script>
     </body>
-</html>
+</Base>
