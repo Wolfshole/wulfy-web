@@ -367,74 +367,74 @@ section.welcome p {
 }
 
 /* Night Mode */
-body.night-mode section.navigation {
-    background: var(--nav-bg, #2a2a2a);
+[data-theme="dark"] section.navigation {
+    background: var(--header-bg, #2a2a2a);
 }
 
-body.night-mode section.navigation nav a {
-    color: var(--link-color, #e0e0e0);
+[data-theme="dark"] section.navigation nav a {
+    color: var(--link-color, #66b3ff);
 }
 
-body.night-mode section.navigation nav a:hover {
-    background-color: var(--nav-hover, rgba(255, 255, 255, 0.1));
-    color: #ffffff;
+[data-theme="dark"] section.navigation nav a:hover {
+    background-color: var(--nav-hover, #3a3a3a);
+    color: var(--link-hover-color, #99ccff);
 }
 
-body.night-mode section.navigation .btn-login,
-body.night-mode section.navigation .btn-register,
-body.night-mode section.navigation #nightModeBtn {
+[data-theme="dark"] section.navigation .btn-login,
+[data-theme="dark"] section.navigation .btn-register,
+[data-theme="dark"] section.navigation #nightModeBtn {
     background: var(--button-bg, #4da6ff);
     color: var(--button-text, #1a1a1a);
 }
 
-body.night-mode section.navigation .btn-login:hover {
+[data-theme="dark"] section.navigation .btn-login:hover {
     background: #357abd;
 }
 
-body.night-mode section.navigation .btn-register:hover {
+[data-theme="dark"] section.navigation .btn-register:hover {
     background: #229954;
 }
 
-body.night-mode article,
-body.night-mode aside section,
-body.night-mode .about-me,
-body.night-mode .projects,
-body.night-mode .faq,
-body.night-mode .list-with-all,
-body.night-mode .newly-started-projects,
-body.night-mode .thx,
-body.night-mode section.welcome {
-    background-color: var(--welcome-bg, #2a2a2a);
+[data-theme="dark"] article,
+[data-theme="dark"] aside section,
+[data-theme="dark"] .about-me,
+[data-theme="dark"] .projects,
+[data-theme="dark"] .faq,
+[data-theme="dark"] .list-with-all,
+[data-theme="dark"] .newly-started-projects,
+[data-theme="dark"] .thx,
+[data-theme="dark"] section.welcome {
+    background-color: #2a2a2a;
 }
 
-body.night-mode .about-me h1,
-body.night-mode .projects h1,
-body.night-mode .faq h1,
-body.night-mode .list-with-all h1,
-body.night-mode .newly-started-projects h1,
-body.night-mode .thx h2,
-body.night-mode section.welcome h1 {
-    color: var(--welcome-title, #e0e0e0);
+[data-theme="dark"] .about-me h1,
+[data-theme="dark"] .projects h1,
+[data-theme="dark"] .faq h1,
+[data-theme="dark"] .list-with-all h1,
+[data-theme="dark"] .newly-started-projects h1,
+[data-theme="dark"] .thx h2,
+[data-theme="dark"] section.welcome h1 {
+    color: #e0e0e0;
 }
 
-body.night-mode .about-me h2,
-body.night-mode .projects h2,
-body.night-mode .faq h2 {
+[data-theme="dark"] .about-me h2,
+[data-theme="dark"] .projects h2,
+[data-theme="dark"] .faq h2 {
     color: #8b9cff;
     border-top-color: #444;
 }
 
-body.night-mode .about-me p,
-body.night-mode .projects p,
-body.night-mode .faq p,
-body.night-mode .list-with-all p,
-body.night-mode .newly-started-projects p,
-body.night-mode .thx p,
-body.night-mode section.welcome p {
-    color: var(--welcome-text, #b0b0b0);
+[data-theme="dark"] .about-me p,
+[data-theme="dark"] .projects p,
+[data-theme="dark"] .faq p,
+[data-theme="dark"] .list-with-all p,
+[data-theme="dark"] .newly-started-projects p,
+[data-theme="dark"] .thx p,
+[data-theme="dark"] section.welcome p {
+    color: #b0b0b0;
 }
 
-body.night-mode .projects a,
-body.night-mode .thx a {
+[data-theme="dark"] .projects a,
+[data-theme="dark"] .thx a {
     color: #6ab0f3;
 }
