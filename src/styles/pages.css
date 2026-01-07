@@ -371,6 +371,30 @@ body.night-mode section.navigation {
     background: var(--nav-bg, #2a2a2a);
 }
 
+body.night-mode section.navigation nav a {
+    color: var(--link-color, #e0e0e0);
+}
+
+body.night-mode section.navigation nav a:hover {
+    background-color: var(--nav-hover, rgba(255, 255, 255, 0.1));
+    color: #ffffff;
+}
+
+body.night-mode section.navigation .btn-login,
+body.night-mode section.navigation .btn-register,
+body.night-mode section.navigation #nightModeBtn {
+    background: var(--button-bg, #4da6ff);
+    color: var(--button-text, #1a1a1a);
+}
+
+body.night-mode section.navigation .btn-login:hover {
+    background: #357abd;
+}
+
+body.night-mode section.navigation .btn-register:hover {
+    background: #229954;
+}
+
 body.night-mode article,
 body.night-mode aside section,
 body.night-mode .about-me,
