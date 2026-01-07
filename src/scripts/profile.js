@@ -151,14 +151,6 @@ if (fileInput) {
     
     if (!file) return;
     
-    // Dateigröße prüfen (max 5 MB)
-    const maxSize = 5 * 1024 * 1024; // 5 MB in Bytes
-    if (file.size > maxSize) {
-      showMessage('Die Datei ist zu groß! Maximale Größe: 5 MB', true);
-      fileInput.value = '';
-      return;
-    }
-    
     // Dateityp prüfen
     if (!file.type.startsWith('image/')) {
       showMessage('Bitte wähle eine Bilddatei aus!', true);

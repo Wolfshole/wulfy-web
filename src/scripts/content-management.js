@@ -294,3 +294,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Funktionen global verfügbar machen
+window.openAddModal = openAddModal;
+window.editContent = editContent;
+window.deleteContent = deleteContent;
+window.closeModal = closeModal;

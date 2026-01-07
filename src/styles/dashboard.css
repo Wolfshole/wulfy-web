@@ -112,7 +112,6 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #667eea;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
@@ -127,7 +126,6 @@
   font-size: 2.5rem;
   color: white;
   font-weight: bold;
-  border: 3px solid #667eea;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
@@ -418,27 +416,73 @@ body.night-mode .quick-links a:hover {
 }
 
 .users-list {
-  max-height: 400px;
-  overflow-y: auto;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-item-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.user-item-delete-action {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.delete-confirm-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.delete-confirm-btn:hover {
+  transform: scale(1.1);
+}
+
+.delete-confirm-btn span:first-child {
+  font-size: 1.5rem;
 }
 
 .user-item {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
   background: #f9f9f9;
   border-radius: 8px;
-  margin-bottom: 0.5rem;
-  transition: all 0.2s ease;
+  transition: transform 0.3s ease;
+  cursor: grab;
+  touch-action: pan-y;
 }
 
-.user-item:hover {
-  background: #f0f0f0;
-  transform: translateX(4px);
+.user-item:active {
+  cursor: grabbing;
 }
 
 .user-info-item {
@@ -453,7 +497,6 @@ body.night-mode .quick-links a:hover {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #667eea;
 }
 
 .user-avatar-placeholder {
@@ -466,7 +509,6 @@ body.night-mode .quick-links a:hover {
   justify-content: center;
   color: white;
   font-weight: bold;
-  border: 2px solid #667eea;
 }
 
 .user-details h4 {

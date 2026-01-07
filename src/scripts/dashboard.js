@@ -227,19 +227,99 @@ function loadUsersList(searchTerm = '') {
           </div>
         </div>
         <div class="user-actions">
-          <button class="btn-icon" onclick="editUser('${user.username}')" title="Benutzer bearbeiten">
+          <button class="btn-icon" onclick="editUser('${user.username.replace(/'/g, "\\'")}');" title="Benutzer bearbeiten">
             ✏️
           </button>
-          <button class="btn-icon toggle-admin" onclick="toggleUserAdmin('${user.username}')" title="Admin-Status ändern">
+          <button class="btn-icon toggle-admin" onclick="toggleUserAdmin('${user.username.replace(/'/g, "\\'")}');" title="Admin-Status ändern">
             👑
           </button>
-          <button class="btn-icon delete" onclick="deleteUser('${user.username}')" title="Benutzer löschen">
+          <button class="btn-icon delete" onclick="deleteUser('${user.username.replace(/'/g, "\\'")}');" title="Benutzer löschen">
             🗑️
           </button>
         </div>
       </div>
     `;
   }).join('');
+  
+  // Swipe-to-delete Funktionalität hinzufügen
+  initSwipeToDelete();
+}
+
+// Swipe-to-delete initialisieren
+function initSwipeToDelete() {
+  const userItems = document.querySelectorAll('.user-item');
+  
+  userItems.forEach(item => {
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    let isSwiped = false;
+    
+    const onStart = (e) => {
+      isDragging = true;
+      startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+      currentX = startX;
+      item.style.transition = 'none';
+    };
+    
+    const onMove = (e) => {
+      if (!isDragging) return;
+      
+      currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+      const diff = currentX - startX;
+      
+      // Nur nach links wischen erlauben (negative Werte)
+      if (diff < 0) {
+        const translateX = Math.max(diff, -100);
+        item.style.transform = `translateX(${translateX}px)`;
+      }
+    };
+    
+    const onEnd = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      const diff = currentX - startX;
+      item.style.transition = 'transform 0.3s ease';
+      
+      // Wenn mehr als 60px nach links gewischt wurde
+      if (diff < -60) {
+        item.style.transform = 'translateX(-100px)';
+        isSwiped = true;
+      } else {
+        item.style.transform = 'translateX(0)';
+        isSwiped = false;
+      }
+    };
+    
+    // Mouse Events
+    item.addEventListener('mousedown', onStart);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+    
+    // Touch Events
+    item.addEventListener('touchstart', onStart, { passive: true });
+    item.addEventListener('touchmove', onMove, { passive: true });
+    item.addEventListener('touchend', onEnd);
+    
+    // Click außerhalb schließt geöffnete Items
+    document.addEventListener('click', (e) => {
+      if (!item.contains(e.target) && isSwiped) {
+        item.style.transform = 'translateX(0)';
+        isSwiped = false;
+      }
+    });
+  });
+  
+  // Delete Button Event Listeners
+  const deleteButtons = document.querySelectorAll('.delete-confirm-btn');
+  deleteButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const username = btn.getAttribute('data-username');
+      deleteUser(username);
+    });
+  });
 }
 
 // Initialen extrahieren
@@ -533,6 +613,28 @@ function setupEventListeners() {
     if (e.target.id === 'user-modal') {
       closeUserModal();
     }
+  });
+  
+  // Tab-Switching für Content-Verwaltung
+  initContentTabs();
+}
+
+// Tab-Switching initialisieren
+function initContentTabs() {
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const targetTab = button.getAttribute('data-tab');
+      
+      // Alle Tabs und Buttons deaktivieren
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Ausgewählten Tab und Button aktivieren
+      button.classList.add('active');
+      document.getElementById(`tab-${targetTab}`).classList.add('active');
+    });
   });
 }
 
