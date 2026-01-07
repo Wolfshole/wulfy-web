@@ -1,0 +1,416 @@
+/* ===== GEMEINSAMES STYLING FÜR CONTENT-SEITEN ===== */
+
+/* Navigation für alle Seiten */
+section.navigation {
+    background: var(--nav-bg, #f8f9fa);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    padding: 1rem;
+}
+
+section.navigation nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+section.navigation nav li {
+    margin: 0;
+}
+
+section.navigation nav a {
+    color: var(--link-color, #333);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: block;
+}
+
+section.navigation nav a:hover {
+    background-color: var(--nav-hover, rgba(0, 0, 0, 0.05));
+}
+
+/* Main Content Sections */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+article {
+    background: var(--card-bg, #ffffff);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+aside {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    padding: 0 2rem;
+}
+
+aside section {
+    background: var(--card-bg, #ffffff);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Content Sections */
+.about-me,
+.projects,
+.faq,
+.list-with-all,
+.newly-started-projects,
+.thx,
+section.welcome {
+    padding: 2rem;
+    background-color: var(--welcome-bg, #f9f9f9);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-me h1,
+.projects h1,
+.faq h1,
+.list-with-all h1,
+.newly-started-projects h1,
+.thx h2,
+section.welcome h1 {
+    color: var(--welcome-title, #333);
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+}
+
+.about-me h2,
+.projects h2,
+.faq h2,
+.list-with-all h2,
+.newly-started-projects h2,
+.thx h2 {
+    color: var(--text-color, #444);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.about-me p,
+.projects p,
+.faq p,
+.list-with-all p,
+.newly-started-projects p,
+.thx p,
+section.welcome p {
+    color: var(--welcome-text, #555);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+/* Listen Styling */
+.projects ul,
+.list-with-all ul,
+.newly-started-projects ul,
+.faq ul {
+    padding-left: 2rem;
+    margin: 1rem 0;
+}
+
+.projects li,
+.list-with-all li,
+.newly-started-projects li,
+.faq li {
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.projects a,
+.thx a {
+    color: #4a90e2;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.projects a:hover,
+.thx a:hover {
+    color: #357abd;
+    text-decoration: underline;
+}
+
+/* FAQ spezifisches Styling */
+.faq h2 {
+    color: #667eea;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid #e0e0e0;
+}
+
+.faq h2:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+    main,
+    aside {
+        padding: 1.5rem;
+    }
+    
+    article,
+    aside section {
+        padding: 1.5rem;
+    }
+}
+
+/* Tablet Klein & Mobile Groß (max-width: 768px) */
+@media (max-width: 768px) {
+    section.navigation {
+        padding: 0.5rem;
+    }
+    
+    section.navigation nav ul {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0.5rem;
+    }
+    
+    section.navigation nav li {
+        width: 100%;
+    }
+    
+    section.navigation nav a,
+    section.navigation .btn-login,
+    section.navigation .btn-register,
+    section.navigation #nightModeBtn {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+    
+    main,
+    aside {
+        padding: 1rem;
+    }
+    
+    article,
+    aside section {
+        padding: 1.25rem;
+    }
+    
+    .about-me,
+    .projects,
+    .faq,
+    .list-with-all,
+    .newly-started-projects,
+    .thx,
+    section.welcome {
+        padding: 1.5rem;
+    }
+    
+    .about-me h1,
+    .projects h1,
+    .faq h1,
+    .list-with-all h1,
+    .newly-started-projects h1,
+    section.welcome h1 {
+        font-size: 1.8rem;
+    }
+    
+    .about-me h2,
+    .projects h2,
+    .faq h2,
+    .list-with-all h2,
+    .newly-started-projects h2,
+    .thx h2 {
+        font-size: 1.5rem;
+    }
+    
+    .about-me p,
+    .projects p,
+    .faq p,
+    .list-with-all p,
+    .newly-started-projects p,
+    .thx p,
+    section.welcome p {
+        font-size: 1rem;
+    }
+    
+    .projects ul,
+    .list-with-all ul,
+    .newly-started-projects ul {
+        padding-left: 1.5rem;
+    }
+    
+    .projects li,
+    .list-with-all li,
+    .newly-started-projects li {
+        font-size: 1rem;
+    }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+    section.navigation {
+        padding: 0.25rem;
+    }
+    
+    section.navigation nav ul {
+        gap: 5px;
+        padding: 0.25rem;
+    }
+    
+    section.navigation nav a,
+    section.navigation .btn-login,
+    section.navigation .btn-register,
+    section.navigation #nightModeBtn {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    main,
+    aside {
+        padding: 0.75rem;
+    }
+    
+    article,
+    aside section {
+        padding: 1rem;
+    }
+    
+    .about-me,
+    .projects,
+    .faq,
+    .list-with-all,
+    .newly-started-projects,
+    .thx,
+    section.welcome {
+        padding: 1rem;
+    }
+    
+    .about-me h1,
+    .projects h1,
+    .faq h1,
+    .list-with-all h1,
+    .newly-started-projects h1,
+    section.welcome h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .about-me h2,
+    .projects h2,
+    .faq h2,
+    .list-with-all h2,
+    .newly-started-projects h2,
+    .thx h2 {
+        font-size: 1.3rem;
+        margin-top: 1.5rem;
+    }
+    
+    .about-me p,
+    .projects p,
+    .faq p,
+    .list-with-all p,
+    .newly-started-projects p,
+    .thx p,
+    section.welcome p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .projects ul,
+    .list-with-all ul,
+    .newly-started-projects ul {
+        padding-left: 1.25rem;
+    }
+    
+    .projects li,
+    .list-with-all li,
+    .newly-started-projects li {
+        font-size: 0.95rem;
+        margin-bottom: 0.6rem;
+    }
+}
+
+/* Landscape Orientation für Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    section.navigation nav ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    section.navigation nav li {
+        width: auto;
+        flex: 0 1 auto;
+    }
+    
+    section.navigation nav a,
+    section.navigation .btn-login,
+    section.navigation .btn-register,
+    section.navigation #nightModeBtn {
+        width: auto;
+        padding: 8px 16px;
+    }
+}
+
+/* Night Mode */
+body.night-mode section.navigation {
+    background: var(--nav-bg, #2a2a2a);
+}
+
+body.night-mode article,
+body.night-mode aside section,
+body.night-mode .about-me,
+body.night-mode .projects,
+body.night-mode .faq,
+body.night-mode .list-with-all,
+body.night-mode .newly-started-projects,
+body.night-mode .thx,
+body.night-mode section.welcome {
+    background-color: var(--welcome-bg, #2a2a2a);
+}
+
+body.night-mode .about-me h1,
+body.night-mode .projects h1,
+body.night-mode .faq h1,
+body.night-mode .list-with-all h1,
+body.night-mode .newly-started-projects h1,
+body.night-mode .thx h2,
+body.night-mode section.welcome h1 {
+    color: var(--welcome-title, #e0e0e0);
+}
+
+body.night-mode .about-me h2,
+body.night-mode .projects h2,
+body.night-mode .faq h2 {
+    color: #8b9cff;
+    border-top-color: #444;
+}
+
+body.night-mode .about-me p,
+body.night-mode .projects p,
+body.night-mode .faq p,
+body.night-mode .list-with-all p,
+body.night-mode .newly-started-projects p,
+body.night-mode .thx p,
+body.night-mode section.welcome p {
+    color: var(--welcome-text, #b0b0b0);
+}
+
+body.night-mode .projects a,
+body.night-mode .thx a {
+    color: #6ab0f3;
+}
