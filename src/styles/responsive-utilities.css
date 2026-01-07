@@ -1,0 +1,187 @@
+/* ===== MOBILE-FIRST RESPONSIVE UTILITIES ===== */
+
+/* Viewport Meta Tag sollte in HTML sein:
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"> */
+
+/* Touch-Optimierungen */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch-Geräte: Größere Touch-Targets */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  .btn-primary,
+  .btn-secondary,
+  .btn-icon {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Verhindere Tap-Highlight */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Prevent Text Selection on Touch Devices */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Smooth Scrolling für alle Geräte */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Safe Area für iPhone X+ (Notch) */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+  
+  .site-header {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+}
+
+/* Landscape Optimierung für Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .dashboard-header {
+    padding: 1.5rem 1rem;
+  }
+  
+  .auth-container {
+    min-height: auto;
+    padding: 1rem;
+  }
+  
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* High DPI Displays (Retina) */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Sharper borders */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Hover States nur für Maus-Geräte */
+@media (hover: hover) and (pointer: fine) {
+  .dashboard-card:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+  
+  .user-item:hover {
+    background: #f0f0f0;
+    transform: translateX(4px);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .navigation,
+  .btn-primary,
+  .btn-secondary,
+  .user-actions,
+  .quick-actions,
+  #nightModeBtn {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .dashboard-card,
+  .auth-box {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
+
+/* Reduced Motion für Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Dark Mode Preference */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-mode) {
+    --text-color: #e0e0e0;
+    --text-light: #b0b0b0;
+    --bg-color: #1a1a1a;
+    --bg-secondary: #2a2a2a;
+    --border-color: #404040;
+  }
+}
+
+/* Breakpoint Helper Classes */
+.hide-mobile {
+  display: block;
+}
+
+.hide-tablet {
+  display: block;
+}
+
+.hide-desktop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  
+  .show-mobile {
+    display: block !important;
+  }
+  
+  .hide-tablet {
+    display: block;
+  }
+  
+  .hide-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hide-tablet {
+    display: none !important;
+  }
+  
+  .show-tablet {
+    display: block !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hide-desktop {
+    display: none !important;
+  }
+  
+  .show-desktop {
+    display: block !important;
+  }
+}

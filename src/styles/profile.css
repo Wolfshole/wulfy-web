@@ -152,3 +152,68 @@ body.night-mode .info-label {
 body.night-mode .info-item {
 	border-bottom-color: #444;
 }
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet (max-width: 768px) */
+@media (max-width: 768px) {
+	.profile-picture-section,
+	.profile-info-section {
+		padding: 1.5rem;
+	}
+	
+	.profile-picture,
+	.profile-picture-placeholder {
+		width: 150px;
+		height: 150px;
+		font-size: 3.5rem;
+	}
+	
+	.upload-controls {
+		width: 100%;
+	}
+	
+	.file-input-label,
+	.btn-remove {
+		width: 100%;
+		text-align: center;
+	}
+	
+	.info-item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+	
+	.info-label {
+		font-size: 0.9rem;
+	}
+	
+	.info-value {
+		font-size: 1rem;
+	}
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+	.profile-picture-section,
+	.profile-info-section {
+		padding: 1rem;
+	}
+	
+	.profile-picture,
+	.profile-picture-placeholder {
+		width: 120px;
+		height: 120px;
+		font-size: 2.5rem;
+	}
+	
+	.profile-info-section h2 {
+		font-size: 1.3rem;
+	}
+	
+	.file-input-label {
+		padding: 0.6rem 1.5rem;
+		font-size: 0.9rem;
+	}
+}

@@ -97,3 +97,85 @@ section.welcome p {
     line-height: 1.6;
 }
 
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet (max-width: 768px) */
+@media (max-width: 768px) {
+	section.navigation nav ul {
+		flex-direction: column;
+		gap: 10px;
+		padding: 1rem;
+	}
+	
+	section.navigation nav li {
+		width: 100%;
+	}
+	
+	section.navigation nav a,
+	.btn-login,
+	.btn-register {
+		width: 100%;
+		text-align: center;
+		display: block;
+		padding: 10px;
+	}
+	
+	section.welcome {
+		padding: 30px 20px;
+	}
+	
+	section.welcome h1 {
+		font-size: 1.8rem;
+	}
+	
+	section.welcome p {
+		font-size: 16px;
+	}
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+	section.navigation nav ul {
+		gap: 5px;
+		padding: 0.5rem;
+	}
+	
+	section.navigation nav a,
+	.btn-login,
+	.btn-register {
+		padding: 8px;
+		font-size: 13px;
+	}
+	
+	section.welcome {
+		padding: 20px 15px;
+	}
+	
+	section.welcome h1 {
+		font-size: 1.5rem;
+		margin-bottom: 15px;
+	}
+	
+	section.welcome p {
+		font-size: 14px;
+	}
+	
+	#nightModeBtn {
+		width: 100%;
+		padding: 8px;
+	}
+}
+
+/* Landscape Orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+	section.navigation nav ul {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+	
+	section.navigation nav li {
+		width: auto;
+		flex: 0 1 auto;
+	}
+}
