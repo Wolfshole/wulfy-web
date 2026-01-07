@@ -1,5 +1,6 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
   title: string;
@@ -20,5 +21,6 @@ const { title, lang = 'de' } = Astro.props;
 
   <body>
     <slot />
+    <SpeedInsights />
   </body>
 </html>
