@@ -1,6 +1,6 @@
 // Discord OAuth Callback
 import type { APIRoute } from 'astro';
-import { saveUser, getUserByEmail, createSession } from '../../../../lib/kv';
+import { saveUser, getUserByEmail, createSession, isAdminUser } from '../../../../lib/kv';
 
 export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   const url = new URL(request.url);
@@ -49,10 +49,14 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         email: discordUser.email,
         avatar: discordUser.avatar ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : undefined,
         provider: 'discord',
-        isAdmin: false,
+        isAdmin: isAdminUser(discordUser.username, discordUser.email),
         createdAt: new Date().toISOString()
       };
       
+      await saveUser(user);
+    } else {
+      // Bestehender User - aktualisiere Admin-Status
+      user.isAdmin = isAdminUser(user.username, user.email);
       await saveUser(user);
     }
     

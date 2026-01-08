@@ -86,3 +86,21 @@ export async function deleteUser(userId: string): Promise<void> {
   
   await kv.del(`user:${userId}`);
 }
+
+// Admin-Check: Bestimmte Usernames oder Emails sind automatisch Admins
+const ADMIN_USERNAMES = ['Wulfy', 'UEBlackWulfGHG', 'ueblackwulf', 'ueblackwolf'];
+const ADMIN_EMAILS = ['wulfghg@gmail.com'];
+
+export function isAdminUser(username: string, email?: string): boolean {
+  return ADMIN_USERNAMES.some(admin => admin.toLowerCase() === username.toLowerCase()) ||
+         (email && ADMIN_EMAILS.some(adminEmail => adminEmail.toLowerCase() === email.toLowerCase()));
+}
+
+// User zu Admin machen
+export async function setAdmin(userId: string, isAdmin: boolean = true): Promise<void> {
+  const user = await getUser(userId);
+  if (user) {
+    user.isAdmin = isAdmin;
+    await saveUser(user);
+  }
+}

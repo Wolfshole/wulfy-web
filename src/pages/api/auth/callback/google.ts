@@ -1,6 +1,6 @@
 // Google OAuth Callback
 import type { APIRoute } from 'astro';
-import { saveUser, getUserByEmail, createSession } from '../../../../lib/kv';
+import { saveUser, getUserByEmail, createSession, isAdminUser } from '../../../../lib/kv';
 
 export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   const url = new URL(request.url);
@@ -47,9 +47,12 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         email: googleUser.email,
         avatar: googleUser.picture,
         provider: 'google',
-        isAdmin: false,
+        isAdmin: isAdminUser(googleUser.name, googleUser.email),
         createdAt: new Date().toISOString()
       };
+      await saveUser(user);
+    } else {
+      user.isAdmin = isAdminUser(user.username, user.email);
       await saveUser(user);
     }
     
