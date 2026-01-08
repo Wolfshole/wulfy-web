@@ -1,5 +1,6 @@
 // Discord OAuth Callback
 import type { APIRoute } from 'astro';
+import { saveUser, getUserByEmail, createSession } from '../../../../lib/kv';
 
 export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   const url = new URL(request.url);
@@ -37,18 +38,29 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
     
     const discordUser = await userResponse.json();
     
-    // Benutzer in Session speichern
-    const userData = {
-      id: discordUser.id,
-      username: discordUser.username,
-      email: discordUser.email,
-      avatar: discordUser.avatar ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : null,
-      provider: 'discord',
-      isAdmin: false
-    };
+    // Prüfe ob User bereits existiert
+    let user = await getUserByEmail(discordUser.email);
     
-    // Cookie setzen (oder später in Datenbank speichern)
-    cookies.set('user_session', JSON.stringify(userData), {
+    if (!user) {
+      // Neuer User - erstelle Profil
+      user = {
+        id: `discord_${discordUser.id}`,
+        username: discordUser.username,
+        email: discordUser.email,
+        avatar: discordUser.avatar ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : undefined,
+        provider: 'discord',
+        isAdmin: false,
+        createdAt: new Date().toISOString()
+      };
+      
+      await saveUser(user);
+    }
+    
+    // Session erstellen
+    const sessionId = await createSession(user.id, 30);
+    
+    // Cookie setzen
+    cookies.set('session_id', sessionId, {
       path: '/',
       httpOnly: true,
       secure: true,

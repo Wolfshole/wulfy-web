@@ -1,5 +1,6 @@
 // Google OAuth Callback
 import type { APIRoute } from 'astro';
+import { saveUser, getUserByEmail, createSession } from '../../../../lib/kv';
 
 export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   const url = new URL(request.url);
@@ -36,17 +37,24 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
     
     const googleUser = await userResponse.json();
     
-    // Benutzer in Session speichern
-    const userData = {
-      id: googleUser.id,
-      username: googleUser.name,
-      email: googleUser.email,
-      avatar: googleUser.picture,
-      provider: 'google',
-      isAdmin: false
-    };
+    // Prüfe ob User bereits existiert
+    let user = await getUserByEmail(googleUser.email);
     
-    cookies.set('user_session', JSON.stringify(userData), {
+    if (!user) {
+      user = {
+        id: `google_${googleUser.id}`,
+        username: googleUser.name,
+        email: googleUser.email,
+        avatar: googleUser.picture,
+        provider: 'google',
+        isAdmin: false,
+        createdAt: new Date().toISOString()
+      };
+      await saveUser(user);
+    }
+    
+    const sessionId = await createSession(user.id, 30);
+    cookies.set('session_id', sessionId, {
       path: '/',
       httpOnly: true,
       secure: true,

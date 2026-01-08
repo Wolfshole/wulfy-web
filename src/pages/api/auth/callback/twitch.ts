@@ -1,5 +1,6 @@
 // Twitch OAuth Callback
 import type { APIRoute } from 'astro';
+import { saveUser, getUserByEmail, createSession } from '../../../../lib/kv';
 
 export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   const url = new URL(request.url);
@@ -38,17 +39,23 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
     const twitchData = await userResponse.json();
     const twitchUser = twitchData.data[0];
     
-    // Benutzer in Session speichern
-    const userData = {
-      id: twitchUser.id,
-      username: twitchUser.display_name,
-      email: twitchUser.email,
-      avatar: twitchUser.profile_image_url,
-      provider: 'twitch',
-      isAdmin: false
-    };
+    let user = await getUserByEmail(twitchUser.email);
     
-    cookies.set('user_session', JSON.stringify(userData), {
+    if (!user) {
+      user = {
+        id: `twitch_${twitchUser.id}`,
+        username: twitchUser.display_name,
+        email: twitchUser.email,
+        avatar: twitchUser.profile_image_url,
+        provider: 'twitch',
+        isAdmin: false,
+        createdAt: new Date().toISOString()
+      };
+      await saveUser(user);
+    }
+    
+    const sessionId = await createSession(user.id, 30);
+    cookies.set('session_id', sessionId, {
       path: '/',
       httpOnly: true,
       secure: true,

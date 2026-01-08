@@ -1,5 +1,6 @@
 // Apple OAuth Callback
 import type { APIRoute } from 'astro';
+import { saveUser, getUserByEmail, createSession } from '../../../../lib/kv';
 
 export const POST: APIRoute = async ({ request, redirect, cookies }) => {
   const formData = await request.formData();
@@ -34,16 +35,23 @@ export const POST: APIRoute = async ({ request, redirect, cookies }) => {
     const idToken = tokens.id_token;
     const payload = JSON.parse(atob(idToken.split('.')[1]));
     
-    const userData = {
-      id: payload.sub,
-      username: payload.email?.split('@')[0] || 'Apple User',
-      email: payload.email,
-      avatar: null,
-      provider: 'apple',
-      isAdmin: false
-    };
+    let user = await getUserByEmail(payload.email);
     
-    cookies.set('user_session', JSON.stringify(userData), {
+    if (!user) {
+      user = {
+        id: `apple_${payload.sub}`,
+        username: payload.email?.split('@')[0] || 'Apple User',
+        email: payload.email,
+        avatar: undefined,
+        provider: 'apple',
+        isAdmin: false,
+        createdAt: new Date().toISOString()
+      };
+      await saveUser(user);
+    }
+    
+    const sessionId = await createSession(user.id, 30);
+    cookies.set('session_id', sessionId, {
       path: '/',
       httpOnly: true,
       secure: true,
