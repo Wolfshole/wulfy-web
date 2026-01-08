@@ -89,11 +89,11 @@ export async function deleteUser(userId: string): Promise<void> {
 
 // Admin-Check: Bestimmte Usernames oder Emails sind automatisch Admins
 const ADMIN_USERNAMES = ['Wulfy', 'UEBlackWulfGHG', 'ueblackwulf', 'ueblackwolf'];
-const ADMIN_EMAILS = ['wulfghg@gmail.com'];
+const ADMIN_EMAILS = ['wulfghg@gmail.com', 'e94111993@gmail.com'];
 
 export function isAdminUser(username: string, email?: string): boolean {
   return ADMIN_USERNAMES.some(admin => admin.toLowerCase() === username.toLowerCase()) ||
-         (email && ADMIN_EMAILS.some(adminEmail => adminEmail.toLowerCase() === email.toLowerCase()));
+         Boolean(email && ADMIN_EMAILS.some(adminEmail => adminEmail.toLowerCase() === email.toLowerCase()));
 }
 
 // User zu Admin machen
