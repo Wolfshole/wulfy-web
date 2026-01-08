@@ -1,6 +1,6 @@
 // Wartungsmodus Middleware
 // Setze MAINTENANCE_MODE auf 'false' um die Seite wieder freizugeben
-const MAINTENANCE_MODE = false;
+const MAINTENANCE_MODE = true;
 
 export async function onRequest(context, next) {
   const { url, redirect } = context;
