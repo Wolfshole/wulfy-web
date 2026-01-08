@@ -24,6 +24,12 @@ import "../styles/responsive-utilities.css";
 	  <div class="auth-box">
 		<h1>Anmelden</h1>
 		
+		<!-- Bereits angemeldet Hinweis -->
+		<div id="already-logged-in" style="display: none;" class="info-message">
+		  <p>Du bist bereits angemeldet als <strong id="current-username"></strong></p>
+		  <button type="button" id="switch-account-btn" class="btn-secondary">Mit anderem Konto anmelden</button>
+		</div>
+		
 		<div id="error-message" class="error-message" style="display: none;"></div>
 		<div id="success-message" class="success-message" style="display: none;"></div>
 

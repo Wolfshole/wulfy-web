@@ -220,11 +220,51 @@ if (registrierenBtn) {
   });
 }
 
-// Auto-Login-Check beim Laden der Seite
+// Logout-Funktion
+function logout() {
+  AuthStorage.clearUser();
+  // Zur Login-Seite zurück, aber Auto-Redirect verhindern
+  sessionStorage.setItem('manualLogout', 'true');
+  window.location.href = '/login';
+}
+
+// Logout-Button Handler
 document.addEventListener('DOMContentLoaded', () => {
-  // Wenn auf einer Auth-Seite und bereits eingeloggt, zum Dashboard
-  const isAuthPage = window.location.pathname === '/login' || window.location.pathname === '/register';
-  if (isAuthPage && AuthStorage.isLoggedIn()) {
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      logout();
+    });
+  }
+  
+  // "Mit anderem Konto anmelden" Button auf Login-Seite
+  const switchAccountBtn = document.getElementById('switch-account-btn');
+  if (switchAccountBtn) {
+    switchAccountBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      logout();
+    });
+  }
+  
+  // Auf Login-Seite: Zeige Hinweis wenn bereits angemeldet
+  if (window.location.pathname === '/login') {
+    const currentUser = AuthStorage.getUser();
+    const alreadyLoggedIn = document.getElementById('already-logged-in');
+    const loginForm = document.getElementById('login-form');
+    
+    if (currentUser && alreadyLoggedIn && loginForm) {
+      document.getElementById('current-username').textContent = currentUser.username;
+      alreadyLoggedIn.style.display = 'block';
+      loginForm.style.display = 'none';
+    }
+  }
+  
+  // Wenn auf Registrierungsseite und bereits eingeloggt, zum Dashboard
+  if (window.location.pathname === '/register' && AuthStorage.isLoggedIn()) {
     window.location.href = '/dashboard';
   }
 });
+
+// Globale Logout-Funktion für andere Skripte
+window.logoutUser = logout;
