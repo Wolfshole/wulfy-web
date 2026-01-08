@@ -1,5 +1,7 @@
 // Apple OAuth Callback
-export async function POST({ request, redirect, cookies }) {
+import type { APIRoute } from 'astro';
+
+export const POST: APIRoute = async ({ request, redirect, cookies }) => {
   const formData = await request.formData();
   const code = formData.get('code');
   const state = formData.get('state');
@@ -54,9 +56,9 @@ export async function POST({ request, redirect, cookies }) {
     console.error('Apple OAuth error:', error);
     return redirect('/login?error=oauth_failed');
   }
-}
+};
 
 // Apple verwendet POST statt GET
-export async function GET({ redirect }) {
+export const GET: APIRoute = async ({ redirect }) => {
   return redirect('/login?error=oauth_failed');
-}
+};

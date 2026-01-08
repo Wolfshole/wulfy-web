@@ -1,5 +1,7 @@
 // Discord OAuth Callback
-export async function GET({ request, redirect, cookies }) {
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
@@ -59,4 +61,4 @@ export async function GET({ request, redirect, cookies }) {
     console.error('Discord OAuth error:', error);
     return redirect('/login?error=oauth_failed');
   }
-}
+};
