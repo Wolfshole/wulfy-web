@@ -39,7 +39,8 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 }
 
 // Session erstellen
-export async function createSession(userId: string, expiresInDays: number = 30): Promise<string> {
+// Standard: 365 Tage (1 Jahr) - User bleibt lange eingeloggt
+export async function createSession(userId: string, expiresInDays: number = 365): Promise<string> {
   const sessionId = crypto.randomUUID();
   const expiresAt = Date.now() + (expiresInDays * 24 * 60 * 60 * 1000);
   

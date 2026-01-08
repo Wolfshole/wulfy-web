@@ -56,8 +56,8 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
       await saveUser(user);
     }
     
-    // Session erstellen
-    const sessionId = await createSession(user.id, 30);
+    // Session erstellen (365 Tage = 1 Jahr)
+    const sessionId = await createSession(user.id, 365);
     
     // Cookie setzen
     cookies.set('session_id', sessionId, {
@@ -65,7 +65,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 30 // 30 Tage
+      maxAge: 60 * 60 * 24 * 365 // 1 Jahr
     });
     
     return redirect('/dashboard');

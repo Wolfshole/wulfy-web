@@ -50,13 +50,13 @@ export const POST: APIRoute = async ({ request, redirect, cookies }) => {
       await saveUser(user);
     }
     
-    const sessionId = await createSession(user.id, 30);
+    const sessionId = await createSession(user.id, 365);
     cookies.set('session_id', sessionId, {
       path: '/',
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 30
+      maxAge: 60 * 60 * 24 * 365 // 1 Jahr
     });
     
     return redirect('/dashboard');
