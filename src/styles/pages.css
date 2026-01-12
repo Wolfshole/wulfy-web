@@ -108,7 +108,7 @@ section.welcome h1 {
 .newly-started-projects p,
 .thx p,
 section.welcome p {
-    color: var(--welcome-text, #555);
+    color: var(--text-color, #1a1a1a);
     font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 1rem;
@@ -130,6 +130,7 @@ section.welcome p {
     margin-bottom: 0.8rem;
     font-size: 1.1rem;
     line-height: 1.6;
+    color: var(--text-color, #1a1a1a);
 }
 
 .projects a,

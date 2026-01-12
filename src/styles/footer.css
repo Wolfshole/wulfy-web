@@ -1,7 +1,6 @@
 footer {
-    background: rgba(0,0,0,0.9);
-    color: #ddd;
-    border-top: 2px solid #ff4500;
+    color: var(--text-color, #000);
+    border-top: 2px solid #ffffff;
     padding: 40px 20px;
 }
 
@@ -15,21 +14,22 @@ gap: 30px;
 }
 
 .footer-column h4 {
-color: #ff7518;
+color: var(--text-color, #000);
 margin-bottom: 15px;
+font-weight: bold;
 }
 
 .footer-bottom {
 text-align: center;
 padding-top: 20px;
-border-top: 1px solid #ff4500;
+border-top: 1px solid #000;
 font-size: 0.85em;
-color: #aaa;
+color: var(--text-color, #ffffff);
 }
 
 .copyright {
 margin-top: 10px;
 font-size: 0.8em;
-color: #666;
+color: var(--text-color, #000);
 text-align: center;
 }

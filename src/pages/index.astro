@@ -4,6 +4,7 @@ import "../styles/footer.css";
 import "../styles/index.css";
 import "../styles/nightmode.css";
 import "../styles/responsive-utilities.css";
+import "../styles/translate.css";
 ---
 
 <Base title="Willkommen der Web seite von Wulfy">
@@ -12,14 +13,15 @@ import "../styles/responsive-utilities.css";
 		<section class="navigation">
 			<nav>
 				<ul>
-					<li><a href="/">Startseite</a></li>
-					<li><a href="/about">Über mich</a></li>
-					<li><a href="/projects">Projekte</a></li>
-					<li><a href="/failed_and_newly_started_projects">Gescheiterte und neu angefangende Projekte</a></li>
+					<li><a href="/" data-translate="nav-home">Startseite</a></li>
+					<li><a href="/about" data-translate="nav-about">Über mich</a></li>
+					<li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
+					<li><a href="/failed_and_newly_started_projects" data-translate="nav-failed">Gescheiterte und neu angefangende Projekte</a></li>
 					<li><a href="/faq">FAQ</a>
 					<li><button id="nightModeBtn">Night Mode</button></li>
-					<li><button id="anmelden" class="btn-login">Anmelden</button></li>
-					<li><button id="registrieren" class="btn-register">Registrieren</button></li>
+					<li><button id="translateBtn">🌐 EN</button></li>
+					<li><button id="anmelden" class="btn-login" data-translate="nav-login">Anmelden</button></li>
+					<li><button id="registrieren" class="btn-register" data-translate="nav-register">Registrieren</button></li>
 				</ul>
 			</nav>
 		</section>
@@ -27,13 +29,13 @@ import "../styles/responsive-utilities.css";
 		<main>
 			<article>
 			<section class="welcome">
-			<h1>Willkommen auf meiner Webseite</h1>
-			<p>
+			<h1 data-translate="welcome-title">Willkommen auf meiner Webseite</h1>
+			<p data-translate="welcome-intro">
 				Dies ist die offizielle Webseite von UEBlackWulfGHG.
 				Oder auch bekannt als Wulfy.
 				oder bessergesagt Euch meiner Community.
 			</p>
-			<p>
+			<p data-translate="welcome-description">
 				Hier werdet ihr meine Projekte, Updates und vieles mehr finden.
 				Ich werde versuchen, die Seite regelmäßig zu aktualisieren und immer auf dem Laufenden zu halten.
 			</p>
@@ -45,14 +47,14 @@ import "../styles/responsive-utilities.css";
 	<foodder>
 	<div class="footer-container">
 		<div class="footer-column">
-			<h4>Kontakt</h4><br>
+			<h4 data-translate="footer-contact">Kontakt</h4><br>
 			<p>Discord: ueblackwulf</p><br>
-			<p>Oder auch per Email: wulfghg@gmail.com</p><br>
+			<p data-translate="footer-email">Oder auch per Email: wulfghg@gmail.com</p><br>
 			<div class="footer-column">
-				<h4>Zum Discord Server:</h4>
+				<h4 data-translate="footer-discord">Zum Discord Server:</h4>
 				<!-- Später imressum noch eintragen!!! -->
 				<ul>
-					<li><a href="https://discord.gg/gy4HYACX9g">Server</a></li>
+					<li><a href="https://discord.gg/gy4HYACX9g" data-translate="footer-server">Server</a></li>
 				</ul>
 				<p>&copy; 2026 UEBlackWulfGHG all rights reserved.</p>
 			</div>
@@ -63,5 +65,6 @@ import "../styles/responsive-utilities.css";
 	<script src="../scripts/nightmode.js"></script>
 	<script src="../scripts/navigation.js"></script>
 	<script src="../scripts/auth.js"></script>
+	<script src="../scripts/translate.js"></script>
   </body>
 </Base>

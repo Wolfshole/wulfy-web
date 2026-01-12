@@ -1,0 +1,35 @@
+/* Styles für den Übersetzungsknopf */
+#translateBtn {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#translateBtn:hover {
+    background: linear-gradient(45deg, #45a049, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#translateBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Dark Mode Support für den Übersetzungsknopf */
+body.dark-mode #translateBtn {
+    background: linear-gradient(45deg, #2196F3, #1976D2);
+    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+}
+
+body.dark-mode #translateBtn:hover {
+    background: linear-gradient(45deg, #1976D2, #2196F3);
+    box-shadow: 0 4px 8px rgba(255,255,255,0.2);
+}
