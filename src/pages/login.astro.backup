@@ -3,10 +3,9 @@ import Base from "../layouts/Base.astro";
 import "../styles/auth.css";
 import "../styles/nightmode.css";
 import "../styles/responsive-utilities.css";
-import "../styles/translate.css";
 ---
 
-<Base title="Registrierung - Wulfy">
+<Base title="Login - Wulfy">
   <body>
 	<header>
 	  <section class="navigation">
@@ -23,33 +22,26 @@ import "../styles/translate.css";
 
 	<main class="auth-container">
 	  <div class="auth-box">
-		<h1>Registrieren</h1>
+		<h1>Anmelden</h1>
+		
+		<!-- Bereits angemeldet Hinweis -->
+		<div id="already-logged-in" style="display: none;" class="info-message">
+		  <p>Du bist bereits angemeldet als <strong id="current-username"></strong></p>
+		  <button type="button" id="switch-account-btn" class="btn-secondary">Mit anderem Konto anmelden</button>
+		</div>
 		
 		<div id="error-message" class="error-message" style="display: none;"></div>
 		<div id="success-message" class="success-message" style="display: none;"></div>
 
-		<form id="register-form" class="auth-form">
+		<form id="login-form" class="auth-form">
 		  <div class="form-group">
-			<label for="username">Benutzername</label>
+			<label for="username">Benutzername oder E-Mail</label>
 			<input 
 			  type="text" 
 			  id="username" 
 			  name="username" 
 			  required 
-			  minlength="3"
 			  autocomplete="username"
-			/>
-			<small>Mindestens 3 Zeichen</small>
-		  </div>
-
-		  <div class="form-group">
-			<label for="email">E-Mail</label>
-			<input 
-			  type="email" 
-			  id="email" 
-			  name="email" 
-			  required 
-			  autocomplete="email"
 			/>
 		  </div>
 
@@ -60,34 +52,21 @@ import "../styles/translate.css";
 			  id="password" 
 			  name="password" 
 			  required 
-			  minlength="8"
-			  autocomplete="new-password"
-			/>
-			<small>Mindestens 8 Zeichen</small>
-		  </div>
-
-		  <div class="form-group">
-			<label for="confirm-password">Passwort bestätigen</label>
-			<input 
-			  type="password" 
-			  id="confirm-password" 
-			  name="confirm-password" 
-			  required 
-			  autocomplete="new-password"
+			  autocomplete="current-password"
 			/>
 		  </div>
 
 		  <div class="form-group checkbox-group">
-			<input type="checkbox" id="terms" name="terms" required />
-			<label for="terms">Ich akzeptiere die <a href="/terms">Nutzungsbedingungen</a></label>
+			<input type="checkbox" id="remember" name="remember" />
+			<label for="remember">Angemeldet bleiben</label>
 		  </div>
 
-		  <button type="submit" class="btn-primary">Registrieren</button>
+		  <button type="submit" class="btn-primary">Anmelden</button>
 		</form>
 
 		<!-- OAuth Divider -->
 		<div class="oauth-divider">
-		  <span>oder registrieren mit</span>
+		  <span>oder anmelden mit</span>
 		</div>
 
 		<!-- OAuth Buttons -->
@@ -125,7 +104,8 @@ import "../styles/translate.css";
 		</div>
 
 		<div class="auth-links">
-		  <p>Bereits ein Konto? <a href="/login">Jetzt anmelden</a></p>
+		  <p>Noch kein Konto? <a href="/register">Jetzt registrieren</a></p>
+		  <p><a href="/forgot-password">Passwort vergessen?</a></p>
 		</div>
 	  </div>
 	</main>
@@ -135,4 +115,3 @@ import "../styles/translate.css";
 	<script src="../scripts/oauth.js"></script>
   </body>
 </Base>
-

@@ -1,35 +1,186 @@
 footer {
-    color: var(--text-color, #000);
-    border-top: 2px solid #ffffff;
-    padding: 40px 20px;
+    background-color: var(--footer-bg, #6c757d);
+    color: var(--footer-text, #ecf0f1);
+    border-top: 3px solid var(--accent-color, #3498db);
+    padding: 40px 20px 20px 20px;
+    margin-top: 60px;
+    min-height: 200px;
+    position: relative;
+    overflow: hidden;
 }
 
 .footer-container {
     display: flex;
-flex-wrap: wrap;
-justify-content: space-between;
-max-width: 1200px;
-margin: 0 auto;
-gap: 30px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 40px;
+    min-height: 120px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 250px;
+    min-height: 80px;
 }
 
 .footer-column h4 {
-color: var(--text-color, #000);
-margin-bottom: 15px;
-font-weight: bold;
+    color: var(--footer-heading, #ffffff);
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.1em;
+    border-bottom: 2px solid var(--accent-color, #3498db);
+    padding-bottom: 8px;
+    display: inline-block;
+    min-height: 1.5em;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.footer-column p {
+    color: var(--footer-text, #bdc3c7);
+    line-height: 1.6;
+    margin-bottom: 10px;
+    min-height: 1.6em;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    color: var(--footer-link, #3498db);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: var(--footer-link-hover, #5dade2);
+    text-decoration: underline;
 }
 
 .footer-bottom {
-text-align: center;
-padding-top: 20px;
-border-top: 1px solid #000;
-font-size: 0.85em;
-color: var(--text-color, #ffffff);
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 30px;
+    border-top: 1px solid var(--footer-border, #34495e);
+    font-size: 0.9em;
 }
 
 .copyright {
-margin-top: 10px;
-font-size: 0.8em;
-color: var(--text-color, #000);
-text-align: center;
+    color: var(--footer-copyright, #95a5a6);
+    margin: 0;
+    font-size: 0.85em;
+}
+
+/* Responsive Design für Footer */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .footer-column {
+        min-width: 100%;
+        text-align: center;
+    }
+    
+    footer {
+        padding: 30px 15px 15px 15px;
+    }
+}
+
+/* Dark Mode Anpassungen für Footer */
+body.dark-mode footer {
+    background-color: var(--dark-footer-bg, #1a1a1a);
+    color: var(--dark-footer-text, #e0e0e0);
+    border-top-color: var(--dark-accent-color, #4a90e2);
+}
+
+body.dark-mode .footer-column h4 {
+    color: var(--dark-footer-heading, #ffffff);
+    border-bottom-color: var(--dark-accent-color, #4a90e2);
+}
+
+body.dark-mode .footer-column p {
+    color: var(--dark-footer-text, #cccccc);
+}
+
+body.dark-mode .footer-column ul li a {
+    color: var(--dark-footer-link, #4a90e2);
+}
+
+body.dark-mode .footer-column ul li a:hover {
+    color: var(--dark-footer-link-hover, #6bb6ff);
+}
+
+body.dark-mode .footer-bottom {
+    border-top-color: var(--dark-footer-border, #333333);
+}
+
+body.dark-mode .copyright {
+    color: var(--dark-footer-copyright, #999999);
+}
+
+/* ===== ANTI-SHIFT REGELN FÜR STABILITÄT ===== */
+
+/* Verhindert Layout-Sprünge bei Übersetzungen */
+footer [data-translate] {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+/* Stabilisierung bei Mode-Wechsel */
+footer * {
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Container-Stabilisierung */
+.footer-container {
+    position: relative;
+    contain: layout style;
+}
+
+.footer-column {
+    contain: layout;
+    will-change: auto;
+}
+
+/* Verhindert Verschiebungen bei Textänderungen */
+.footer-column h4,
+.footer-column p,
+.footer-column a {
+    display: block;
+    width: 100%;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Mobile Stabilisierung */
+@media (max-width: 768px) {
+    footer {
+        min-height: 180px;
+    }
+    
+    .footer-container {
+        min-height: 100px;
+    }
+    
+    .footer-column {
+        min-height: 60px;
+    }
 }

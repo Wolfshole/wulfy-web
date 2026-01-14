@@ -4,6 +4,7 @@ import "../styles/footer.css";
 import "../styles/pages.css";
 import "../styles/nightmode.css";
 import "../styles/responsive-utilities.css";
+import "../styles/translate.css";
 ---
 
 <Base title="Gescheiterte und neu angefangende Projekte">
@@ -12,14 +13,15 @@ import "../styles/responsive-utilities.css";
             <section class="navigation">
                 <nav>
                     <ul>
-                        <li><a href="/">Startseite</a></li>
-                        <li><a href="/about">Über mich</a></li>
-                        <li><a href="/projects">Projekte</a></li>
-                        <li><a href="/failed_and_newly_started_projects">Gescheiterte und neu angefangende Projekte</a></li>
-                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/" data-translate="nav-home">Startseite</a></li>
+                        <li><a href="/about" data-translate="nav-about">Über mich</a></li>
+                        <li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
+                        <li><a href="/failed_and_newly_started_projects" data-translate="nav-failed">Gescheiterte und neu angefangende Projekte</a></li>
+                        <li><a href="/faq" data-translate="nav-faq">FAQ</a></li>
                         <li><button id="nightModeBtn">Night Mode</button></li>
-                        <li><button id="anmelden" class="btn-login">Anmelden</button></li>
-                        <li><button id="registrieren" class="btn-register">Registrieren</button></li>
+                        <li><button id="translateBtn">🌐 EN</button></li>
+                        <li><button id="abmelden" class="btn-login" data-translate="nav-logout">Abmelden</button></li>
+                        <li><button id="registrieren" class="btn-register" data-translate="nav-register">Registrieren</button></li>
                     </ul>
                 </nav>
             </section>
@@ -28,11 +30,11 @@ import "../styles/responsive-utilities.css";
                 <article>
                 <section class="list-with-all">
 
-                <h1>Liste mit allen gescheiterten Projekten:</h1>
+                <h1 data-translate="failed-title">Liste mit allen gescheiterten Projekten:</h1>
                 <ul>
-                    <li>Ein Musik Bot für Discord</li>
-                    <li>Eine eigene Custom Firmware für den Nintendo 3DS</li>
-                    <li>Ein Plugin für Minecraft</li>
+                    <li data-translate="failed-item-1">Ein Musik Bot für Discord</li>
+                    <li data-translate="failed-item-2">Eine eigene Custom Firmware für den Nintendo 3DS</li>
+                    <li data-translate="failed-item-3">Ein Plugin für Minecraft</li>
                 </ul>
             </section>
                 </article>
@@ -40,11 +42,11 @@ import "../styles/responsive-utilities.css";
 
             <aside>
                 <section class="newly-started-projects">
-                <h1>Neu angefangende Projekte:</h1>
+                <h1 data-translate="newly-started-title">Neu angefangende Projekte:</h1>
                 <ul>
-                    <li>Eine Webseite für meine Community</li>
-                    <li>Ein Discord Bot für den MFFA Server</li>
-                    <li>Unsere neuen Discord Bots erkäntlich am Wulfy</li>
+                    <li data-translate="newly-started-item-1">Eine Webseite für meine Community</li>
+                    <li data-translate="newly-started-item-2">Ein Discord Bot für den MFFA Server</li>
+                    <li data-translate="newly-started-item-3">Unsere neuen Discord Bots erkäntlich am Wulfy</li>
                 </ul>
             </section>
             </aside>
@@ -65,11 +67,28 @@ import "../styles/responsive-utilities.css";
 				<p>&copy; 2026 UEBlackWulfGHG all rights reserved.</p>
 			</div>
 		</div>
-	</div>
-	</foodder>
+	<footer>
+	    <div class="footer-container">
+		<div class="footer-column">
+			<h4 data-translate="footer-contact">Kontakt</h4>
+			<p>Discord: ueblackwulf</p>
+			<p data-translate="footer-email">Oder auch per Email: wulfghg@gmail.com</p>
+		</div>
+		<div class="footer-column">
+			<h4 data-translate="footer-discord">Zum Discord Server:</h4>
+			<ul>
+				<li><a href="https://discord.gg/gy4HYACX9g" data-translate="footer-server">Server</a></li>
+			</ul>
+		</div>
+	    </div>
+	    <div class="footer-bottom">
+		<p class="copyright">&copy; 2026 UEBlackWulfGHG all rights reserved.</p>
+	    </div>
+	</footer>
 
         <script src="../scripts/nightmode.js"></script>
         <script src="../scripts/navigation.js"></script>
+        <script src="../scripts/translate.js"></script>
 
     </body>
 </Base>

@@ -33,3 +33,270 @@ body.dark-mode #translateBtn:hover {
     background: linear-gradient(45deg, #1976D2, #2196F3);
     box-shadow: 0 4px 8px rgba(255,255,255,0.2);
 }
+
+/* ===== LAYOUT-STABILISIERUNG FÜR ÜBERSETZUNGEN ===== */
+
+/* Navigation Layout-Stabilisierung */
+section.navigation {
+    min-height: 60px;
+    overflow: hidden;
+}
+
+nav ul {
+    min-height: 40px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav li {
+    flex-shrink: 0;
+    min-width: fit-content;
+}
+
+/* Navigation Links - Stabile Größen */
+nav a {
+    white-space: nowrap;
+    min-width: 80px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+/* Buttons - Feste Mindestgrößen */
+.btn-login,
+.btn-register {
+    min-width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#translateBtn {
+    min-width: 60px;
+    white-space: nowrap;
+}
+
+#nightModeBtn {
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+/* Welcome Section - Layout-Stabilisierung */
+section.welcome {
+    min-height: 200px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+section.welcome h1 {
+    min-height: 2.5em;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+section.welcome p {
+    min-height: 1.6em;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Footer - Layout-Stabilisierung */
+.footer-container {
+    min-height: 120px;
+}
+
+.footer-column {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.footer-column h4 {
+    min-height: 1.5em;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+/* Allgemeine Regeln für übersetzbare Elemente */
+[data-translate] {
+    transition: none !important; /* Keine Animationen beim Text-Wechsel */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    position: relative;
+    contain: layout;
+    display: block;
+    width: 100%;
+}
+
+/* Komplette Layout-Stabilisierung */
+body {
+    overflow-x: hidden;
+}
+
+main, header, section, article {
+    contain: layout style;
+    position: relative;
+}
+
+/* Spezielle Stabilisierung für den Hauptinhalt */
+section.welcome {
+    min-height: 200px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    contain: layout;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+}
+
+section.welcome h1 {
+    min-height: 2.5em;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    position: relative;
+    width: 100%;
+    contain: layout;
+}
+
+section.welcome p {
+    min-height: 1.6em;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    position: relative;
+    width: 100%;
+    contain: layout;
+}
+@media (max-width: 768px) {
+    nav ul {
+        min-height: auto;
+        justify-content: center;
+    }
+    
+    nav a {
+        min-width: 70px;
+        max-width: 150px;
+        font-size: 14px;
+    }
+    
+    .btn-login,
+    .btn-register {
+        min-width: 80px;
+        font-size: 13px;
+    }
+    
+    section.welcome {
+        min-height: 150px;
+    }
+    
+    section.welcome h1 {
+        min-height: 2em;
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    nav a {
+        min-width: 60px;
+        max-width: 120px;
+        font-size: 12px;
+    }
+    
+    .btn-login,
+    .btn-register {
+        min-width: 70px;
+        font-size: 12px;
+    }
+    
+    section.welcome h1 {
+        min-height: 1.8em;
+        font-size: 1.3rem;
+    }
+}
+
+/* ===== ZUSÄTZLICHE ANTI-SHIFT REGELN ===== */
+
+/* Verhindert horizontale Verschiebungen */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
+/* Container-Fixierung */
+.navigation, 
+section.welcome,
+footer {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    contain: layout style;
+}
+
+/* Text-Layout-Fixierung bei Übersetzungen */
+[data-translate] {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    transform: none !important;
+    animation: none !important;
+}
+
+/* Navigation stabilisieren */
+nav {
+    width: 100%;
+    max-width: 100%;
+    contain: layout;
+}
+
+nav ul {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Mobile Anti-Shift */
+@media (max-width: 768px) {
+    [data-translate] {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    section.welcome {
+        padding: 20px 15px;
+        max-width: calc(100vw - 30px);
+    }
+}
+
+/* ===== RADIKALE ANTI-SHIFT LÖSUNG ===== */
+body.translating {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+body.translating * {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+}
+
+body.translating [data-translate] {
+    position: relative !important;
+    overflow: hidden !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+}

@@ -3,6 +3,7 @@ import "../styles/footer.css";
 import "../styles/pages.css";
 import "../styles/nightmode.css";
 import "../styles/responsive-utilities.css";
+import "../styles/translate.css";
 ---
 
 <!DOCTYPE html>
@@ -18,14 +19,15 @@ import "../styles/responsive-utilities.css";
             <section class="navigation">
                 <nav>
                     <ul>
-                        <li><a href="/">Startseite</a></li>
-                        <li><a href="/about">Über mich</a></li>
-                        <li><a href="/projects">Projekte</a></li>
-                        <li><a href="/failed_and_newly_started_projects">Gescheiterte und neu angefangende Projekte</a></li>
-                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/" data-translate="nav-home">Startseite</a></li>
+                        <li><a href="/about" data-translate="nav-about">Über mich</a></li>
+                        <li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
+                        <li><a href="/failed_and_newly_started_projects" data-translate="nav-failed">Gescheiterte und neu angefangende Projekte</a></li>
+                        <li><a href="/faq" data-translate="nav-faq">FAQ</a></li>
                         <li><button id="nightModeBtn">Night Mode</button></li>
-                        <li><button id="anmelden" class="btn-login">Anmelden</button></li>
-                        <li><button id="registrieren" class="btn-register">Registrieren</button></li>
+                        <li><button id="translateBtn">🌐 EN</button></li>
+                        <li><button id="abmelden" class="btn-login" data-translate="nav-logout">Abmelden</button></li>
+                        <li><button id="registrieren" class="btn-register" data-translate="nav-register">Registrieren</button></li>
                     </ul>
                 </nav>
             </section>
@@ -33,19 +35,18 @@ import "../styles/responsive-utilities.css";
             <main>
                 <article>
                     <section class="faq">
-                        <h1>Häufig gestellte Fragen (FAQ)</h1>
-                        <h2>Frage 1: Wie kann ich mich registrieren?</h2>
-                        <p>Antwort: Du klickst auf die Schaltfläche "Registrieren" oben rechts auf der Seite und füllst das Formular aus.</p>
+                        <h1 data-translate="faq-title">Häufig gestellte Fragen (FAQ)</h1>
+                        <h2 data-translate="faq-q1">Frage 1: Wie kann ich mich registrieren?</h2>
+                        <p data-translate="faq-a1">Antwort: Du klickst auf die Schaltfläche "Registrieren" oben rechts auf der Seite und füllst das Formular aus.</p>
                         
-                        <h2>Frage 2: Wie kann ich den Night Mode aktivieren?</h2>
-                        <p>Antwort: Du klickst auf die Schaltfläche "Night Mode" in der Navigationsleiste, um zwischen dem normalen Modus und dem Night Mode zu wechseln.</p>
+                        <h2 data-translate="faq-q2">Frage 2: Wie kann ich den Night Mode aktivieren?</h2>
+                        <p data-translate="faq-a2">Antwort: Du klickst auf die Schaltfläche "Night Mode" in der Navigationsleiste, um zwischen dem normalen Modus und dem Night Mode zu wechseln.</p>
                         
-                        <h2>Frage 3: Wo finde ich meine Projekte?</h2>
-                        <p>Antwort: Du klickst auf "Projekte" in der Navigationsleiste, um eine Liste aller meiner Projekte zu sehen.</p>
+                        <h2 data-translate="faq-q3">Frage 3: Wo finde ich meine Projekte?</h2>
+                        <p data-translate="faq-a3">Antwort: Du klickst auf "Projekte" in der Navigationsleiste, um eine Liste aller meiner Projekte zu sehen.</p>
                         
-                        <h2>Frage 4: Wird es eine Custom Firmware für den 3DS geben?</h2>
-                        <p>Antwort: Man munkelt, dass ich nach der Fertigstellung dieser Webseite an dieser Arbeiten werde.</p>
-                        <p>Weiter Infos folgen aber in meinen Streams.</p>
+                        <h2 data-translate="faq-q4">Frage 4: Wird es eine Custom Firmware für den 3DS geben?</h2>
+                        <p data-translate="faq-a4">Antwort: Man munkelt, dass ich nach der Fertigstellung dieser Webseite an dieser Arbeiten werde.<br>Weiter Infos folgen aber in meinen Streams.</p>
                     </section>
                 </article>
             </main>
@@ -67,11 +68,15 @@ import "../styles/responsive-utilities.css";
 				<p>&copy; 2026 UEBlackWulfGHG all rights reserved.</p>
 			</div>
 		</div>
-	</div>
-	</foodder>
+	    </div>
+	    <div class="footer-bottom">
+		<p class="copyright">&copy; 2026 UEBlackWulfGHG all rights reserved.</p>
+	    </div>
+	</footer>
 
     <script src="../scripts/nightmode.js"></script>
     <script src="../scripts/navigation.js"></script>
+    <script src="../scripts/translate.js"></script>
 
     </body>
 </html>

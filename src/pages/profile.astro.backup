@@ -3,7 +3,6 @@ import "../styles/dashboard.css";
 import "../styles/nightmode.css";
 import "../styles/profile.css";
 import "../styles/responsive-utilities.css";
-import "../styles/translate.css";
 ---
 
 <!DOCTYPE html>
@@ -88,4 +87,3 @@ import "../styles/translate.css";
 	<script src="../scripts/profile.js"></script>
   </body>
 </html>
-
