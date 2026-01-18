@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import SimpleLayout from "../layouts/SimpleLayout.astro";
 import "../styles/pages.css";
 import "../styles/responsive-utilities.css";
 import "../styles/translate.css";
@@ -7,38 +7,11 @@ import "../styles/impressum.css";
 ---
 <!-- Impressum Später ändern mit anderen Daten -->
 
-<BaseLayout title="Impressum">
+<SimpleLayout title="Impressum">
     <div class="page-container">
-        <header class="page-header">
-            <div class="container">
-                <nav class="main-nav">
-                    <div class="nav-brand">
-                        <span class="logo">Wulfy</span>
-                    </div>
-                    <ul class="nav-menu" id="navMenu">
-                        <li><a href="/" data-translate="nav-home">Startseite</a></li>
-                        <li><a href="/about" data-translate="nav-about">Über mich</a></li>
-                        <li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
-                        <li><a href="/failed_and_newly_started_projects" data-translate="nav-failed">Gescheiterte und neu angefangende Projekte</a></li>
-                        <li><a href="/faq" data-translate="nav-faq">FAQ</a></li>
-                        <li><button id="nightModeBtn">Night Mode</button></li>
-                        <li><button id="translateBtn">🌐 EN</button></li>
-                        <li><button id="abmelden" class="btn-login" data-translate="nav-logout">Abmelden</button></li>
-                        <li><button id="registrieren" class="btn-register" data-translate="nav-register">Registrieren</button></li>
-                    </ul>
-                    <div class="hamburger" id="hamburger">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </nav>
-            </div>
-        </header>
-
-        <main class="main-content">
-            <div class="container">
-                <section class="page-section">
-                    <h1 data-translate="impressum-title">Impressum</h1>
+        <div class="container">
+            <section class="page-section">
+                <h1 data-translate="impressum-title">Impressum</h1>
                     
                     <div class="impressum-content">
                         <h2 data-translate="impressum-contact-title">Angaben gemäß § 5 TMG</h2>
@@ -135,4 +108,4 @@ import "../styles/impressum.css";
     <script src="../scripts/navigation.js"></script>
     <script src="../scripts/translate.js"></script>
     <script src="../scripts/auth.js"></script>
-</BaseLayout>
+</SimpleLayout>

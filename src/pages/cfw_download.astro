@@ -1,26 +1,9 @@
 ---
-
+import CleanLayout from "../layouts/CleanLayout.astro";
 ---
-<!DOCTYPE html>
-<html lang="de">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Custom Firmware Download</title>
-    </head>
-    <body>
-        <header>
-            <section class="navigation">
-        <nav>
-            <a href="/">WulfyWeb</a>
-            <a href="/about">Über mich</a>
-            <a href="/projects">Projekte</a>
-            <a href="/failed_and_newly_started_projects">Gescheiterte und neu angefangende Projekte</a>
-            <a href="/faq">FAQ</a>
-            <a href="/cfw_download">CFW Download</a>
-        </nav>
-        </section>
 
+<CleanLayout title="Custom Firmware Download">
+    <body>
         <main>
         <section class="cfw-download">
             <h2>Custom Firmware Download</h2>
@@ -30,8 +13,8 @@
             <a href="https://github.com/Wulfy-g/Wulfy3DS">CFW Download</a>
         </section>
         </main>
-        </header>
-       <footer>
+
+        <footer>
 	<div class="footer-container">
 		<div class="footer-column">
 			<h4>Kontakt</h4><br>
@@ -49,9 +32,41 @@
 	</div>
 	</footer>
 
-    <script src="../scripts/nightmode.js"></script>
-    <script src="../scripts/navigation.js"></script>
-    <script src="../scripts/translate.js"></script>
-    </body>
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-content">
+				<div class="footer-section">
+					<h3 data-translate="footer-quick-links">Schnellzugriff</h3>
+					<ul>
+						<li><a href="/" data-translate="nav-home">Startseite</a></li>
+						<li><a href="/about" data-translate="nav-about">Über mich</a></li>
+						<li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
+						<li><a href="/faq" data-translate="nav-faq">FAQ</a></li>
+					</ul>
+				</div>
+				<div class="footer-section">
+					<h3 data-translate="footer-legal">Rechtliches</h3>
+					<ul>
+						<li><a href="/impressum" data-translate="footer-impressum">Impressum</a></li>
+						<li><a href="/datenschutz" data-translate="footer-privacy">Datenschutz</a></li>
+					</ul>
+				</div>
+				<div class="footer-section">
+					<h3 data-translate="footer-contact">Kontakt</h3>
+					<p>
+						<span data-translate="footer-email">E-Mail:</span> 
+						<a href="mailto:wulfghg@gmail.com">wulfghg@gmail.com</a>
+					</p>
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<p data-translate="footer-copyright">&copy; 2026 Wulfy. Alle Rechte vorbehalten.</p>
+			</div>
+		</div>
+	</footer>
 
-</html>
+	<script src="../scripts/nightmode.js"></script>
+	<script src="../scripts/navigation.js"></script>
+	<script src="../scripts/translate.js"></script>
+
+</CleanLayout>

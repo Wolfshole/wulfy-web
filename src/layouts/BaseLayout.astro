@@ -16,48 +16,43 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
   <title>{title}</title>
   <link rel="stylesheet" href="/src/styles/base.css">
   <link rel="stylesheet" href="/src/styles/nightmode.css">
+  <link rel="stylesheet" href="/src/styles/enhanced-navigation.css">
 </head>
 <body>
   <header class="site-header">
-    <nav class="navbar">
-      <div class="navbar-container">
-        <a href="/" class="logo">
-          <span class="logo-text">Wulfy</span>
-        </a>
-        
-        <button class="mobile-menu-toggle" aria-label="Menü öffnen">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+    <section class="navigation">
+      <nav class="navbar">
+        <div class="navbar-container">
+          <a href="/" class="nav-brand">
+            <span class="logo-text">Wulfy</span>
+          </a>
+          
+          <div class="mobile-toggle" aria-label="Navigation Menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
 
-        <ul class="nav-menu">
-          <li><a href="/" class="nav-link">Home</a></li>
-          <li><a href="/about" class="nav-link">Über uns</a></li>
-          <li><a href="/projects" class="nav-link">Projekte</a></li>
-          <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
-        </ul>
+          <ul class="nav-menu" aria-hidden="false">
+            <li><a href="/" class="nav-link" data-translate="nav-home">Startseite</a></li>
+            <li><a href="/about" class="nav-link" data-translate="nav-about">Über mich</a></li>
+            <li><a href="/projects" class="nav-link" data-translate="nav-projects">Projekte</a></li>
+            <li><a href="/faq" class="nav-link" data-translate="nav-faq">FAQ</a></li>
+            <li><a href="/impressum" class="nav-link" data-translate="footer-impressum">Impressum</a></li>
+          </ul>
 
-        <div class="nav-actions">
-          <button id="theme-toggle" class="theme-toggle" aria-label="Theme wechseln">
-            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-          </button>
-          <a href="/login" class="btn btn-primary" id="auth-button">Login</a>
+          <div class="nav-actions">
+            <button id="nightModeBtn" class="theme-toggle" aria-label="Toggle Night Mode">
+              🌙 Night Mode
+            </button>
+            <button id="translateBtn" aria-label="Switch Language">🌐 EN</button>
+            <button id="abmelden" class="btn-login" data-translate="nav-logout">Abmelden</button>
+            <button id="registrieren" class="btn-register" data-translate="nav-register">Registrieren</button>
+          </div>
         </div>
-      </div>
+      </nav>
+    </section>
+  </header>
     </nav>
   </header>
 
@@ -141,5 +136,6 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
       }
     });
   </script>
+  <script src="/src/scripts/enhanced-navigation.js"></script>
 </body>
 </html>

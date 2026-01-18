@@ -1,5 +1,5 @@
 ---
-import Base from "../layouts/Base.astro";
+import CleanLayout from "../layouts/CleanLayout.astro";
 import "../styles/footer.css";
 import "../styles/index.css";
 import "../styles/nightmode.css";
@@ -7,42 +7,24 @@ import "../styles/responsive-utilities.css";
 import "../styles/translate.css";
 ---
 
-<Base title="Willkommen der Web seite von Wulfy">
+<CleanLayout title="Willkommen der Web seite von Wulfy">
   <body>
-	<header>
-		<section class="navigation">
-			<nav>
-				<ul>
-					<li><a href="/" data-translate="nav-home">Startseite</a></li>
-					<li><a href="/about" data-translate="nav-about">Über mich</a></li>
-					<li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
-					<li><a href="/failed_and_newly_started_projects" data-translate="nav-failed">Gescheiterte und neu angefangende Projekte</a></li>
-					<li><a href="/faq">FAQ</a>
-					<li><button id="nightModeBtn">Night Mode</button></li>
-					<li><button id="translateBtn">🌐 EN</button></li>
-					<li><button id="abmelden" class="btn-login" data-translate="nav-logout">Abmelden</button></li>
-					<li><button id="registrieren" class="btn-register" data-translate="nav-register">Registrieren</button></li>
-				</ul>
-			</nav>
-		</section>
-
-		<main>
-			<article>
-			<section class="welcome">
-			<h1 data-translate="welcome-title">Willkommen auf meiner Webseite</h1>
-			<p data-translate="welcome-intro">
-				Dies ist die offizielle Webseite von UEBlackWulfGHG.
-				Oder auch bekannt als Wulfy.
-				oder bessergesagt Euch meiner Community.
-			</p>
-			<p data-translate="welcome-description">
-				Hier werdet ihr meine Projekte, Updates und vieles mehr finden.
-				Ich werde versuchen, die Seite regelmäßig zu aktualisieren und immer auf dem Laufenden zu halten.
-			</p>
-		    </section>
-		    </article>
-		</main>
-	</header>
+	<main>
+		<article>
+		<section class="welcome">
+		<h1 data-translate="welcome-title">Willkommen auf meiner Webseite</h1>
+		<p data-translate="welcome-intro">
+			Dies ist die offizielle Webseite von UEBlackWulfGHG.
+			Oder auch bekannt als Wulfy.
+			oder bessergesagt Euch meiner Community.
+		</p>
+		<p data-translate="welcome-description">
+			Hier werdet ihr meine Projekte, Updates und vieles mehr finden.
+			Ich werde versuchen, die Seite regelmäßig zu aktualisieren und immer auf dem Laufenden zu halten.
+		</p>
+	    </section>
+	    </article>
+	</main>
 
 	<footer>
 	<div class="footer-container">
@@ -64,9 +46,42 @@ import "../styles/translate.css";
 	</div>
 	</footer>
 
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-content">
+				<div class="footer-section">
+					<h3 data-translate="footer-quick-links">Schnellzugriff</h3>
+					<ul>
+						<li><a href="/" data-translate="nav-home">Startseite</a></li>
+						<li><a href="/about" data-translate="nav-about">Über mich</a></li>
+						<li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
+						<li><a href="/faq" data-translate="nav-faq">FAQ</a></li>
+					</ul>
+				</div>
+				<div class="footer-section">
+					<h3 data-translate="footer-legal">Rechtliches</h3>
+					<ul>
+						<li><a href="/impressum" data-translate="footer-impressum">Impressum</a></li>
+						<li><a href="/datenschutz" data-translate="footer-privacy">Datenschutz</a></li>
+					</ul>
+				</div>
+				<div class="footer-section">
+					<h3 data-translate="footer-contact">Kontakt</h3>
+					<p>
+						<span data-translate="footer-email">E-Mail:</span> 
+						<a href="mailto:wulfghg@gmail.com">wulfghg@gmail.com</a>
+					</p>
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<p data-translate="footer-copyright">&copy; 2026 Wulfy. Alle Rechte vorbehalten.</p>
+			</div>
+		</div>
+	</footer>
+
 	<script src="../scripts/nightmode.js"></script>
 	<script src="../scripts/navigation.js"></script>
 	<script src="../scripts/auth.js"></script>
 	<script src="../scripts/translate.js"></script>
   </body>
-</Base>
+</CleanLayout>

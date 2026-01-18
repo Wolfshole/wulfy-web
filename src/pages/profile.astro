@@ -1,4 +1,5 @@
 ---
+import CleanLayout from "../layouts/CleanLayout.astro";
 import "../styles/dashboard.css";
 import "../styles/nightmode.css";
 import "../styles/profile.css";
@@ -6,31 +7,8 @@ import "../styles/responsive-utilities.css";
 import "../styles/translate.css";
 ---
 
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Mein Profil</title>
-  </head>
-
+<CleanLayout title="Mein Profil">
   <body>
-	<header>
-	  <section class="navigation">
-		<nav>
-		  <ul>
-			<li><a href="/">Startseite</a></li>
-			<li><a href="/about">Über mich</a></li>
-			<li><a href="/projects">Projekte</a></li>
-			<li><a href="/dashboard">Dashboard</a></li>
-			<li><button id="nightModeBtn">Night Mode</button></li>
-			<li><a href="/profile" class="btn-login active">Profil</a></li>
-			<li><button id="logout-btn">Abmelden</button></li>
-		  </ul>
-		</nav>
-	  </section>
-	</header>
-
 	<main class="dashboard-container">
 	  <div class="dashboard-header">
 		<h1>Mein Profil 👤</h1>
@@ -84,8 +62,41 @@ import "../styles/translate.css";
 	  </div>
 	</main>
 
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-content">
+				<div class="footer-section">
+					<h3 data-translate="footer-quick-links">Schnellzugriff</h3>
+					<ul>
+						<li><a href="/" data-translate="nav-home">Startseite</a></li>
+						<li><a href="/about" data-translate="nav-about">Über mich</a></li>
+						<li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
+						<li><a href="/faq" data-translate="nav-faq">FAQ</a></li>
+					</ul>
+				</div>
+				<div class="footer-section">
+					<h3 data-translate="footer-legal">Rechtliches</h3>
+					<ul>
+						<li><a href="/impressum" data-translate="footer-impressum">Impressum</a></li>
+						<li><a href="/datenschutz" data-translate="footer-privacy">Datenschutz</a></li>
+					</ul>
+				</div>
+				<div class="footer-section">
+					<h3 data-translate="footer-contact">Kontakt</h3>
+					<p>
+						<span data-translate="footer-email">E-Mail:</span> 
+						<a href="mailto:wulfghg@gmail.com">wulfghg@gmail.com</a>
+					</p>
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<p data-translate="footer-copyright">&copy; 2026 Wulfy. Alle Rechte vorbehalten.</p>
+			</div>
+		</div>
+	</footer>
+
 	<script src="../scripts/nightmode.js"></script>
 	<script src="../scripts/profile.js"></script>
   </body>
-</html>
+</CleanLayout>
 
