@@ -29,3 +29,6 @@ pnpm-debug.log*
 
 .vercel
 .env*.local
+
+# backup files
+*.backup

@@ -3,25 +3,25 @@
 const OAuthConfig = {
   discord: {
     authUrl: 'https://discord.com/api/oauth2/authorize',
-    clientId: import.meta.env.PUBLIC_DISCORD_CLIENT_ID || 'YOUR_DISCORD_CLIENT_ID',
+    clientId: import.meta.env.PUBLIC_DISCORD_CLIENT_ID || null,
     scope: 'identify email',
     redirectUri: `${window.location.origin}/api/auth/callback/discord`
   },
   google: {
     authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
-    clientId: import.meta.env.PUBLIC_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID',
+    clientId: import.meta.env.PUBLIC_GOOGLE_CLIENT_ID || null,
     scope: 'openid email profile',
     redirectUri: `${window.location.origin}/api/auth/callback/google`
   },
   apple: {
     authUrl: 'https://appleid.apple.com/auth/authorize',
-    clientId: import.meta.env.PUBLIC_APPLE_CLIENT_ID || 'YOUR_APPLE_CLIENT_ID',
+    clientId: import.meta.env.PUBLIC_APPLE_CLIENT_ID || null,
     scope: 'name email',
     redirectUri: `${window.location.origin}/api/auth/callback/apple`
   },
   twitch: {
     authUrl: 'https://id.twitch.tv/oauth2/authorize',
-    clientId: import.meta.env.PUBLIC_TWITCH_CLIENT_ID || 'YOUR_TWITCH_CLIENT_ID',
+    clientId: import.meta.env.PUBLIC_TWITCH_CLIENT_ID || null,
     scope: 'user:read:email',
     redirectUri: `${window.location.origin}/api/auth/callback/twitch`
   }
@@ -38,6 +38,11 @@ function initiateOAuth(provider) {
   
   if (!config) {
     console.error(`Unknown OAuth provider: ${provider}`);
+    return;
+  }
+  
+  if (!config.clientId) {
+    alert(`OAuth für ${provider} ist noch nicht konfiguriert. Verwende bitte die lokale Anmeldung.`);
     return;
   }
   

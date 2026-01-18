@@ -16,13 +16,134 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
   <title>{title}</title>
   <link rel="stylesheet" href="/src/styles/base.css">
   <link rel="stylesheet" href="/src/styles/nightmode.css">
+  <style>
+    .auth-nav {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .auth-nav button, .auth-nav a {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-login {
+      background: #4a90e2;
+      color: white;
+    }
+    .btn-login:hover {
+      background: #357abd;
+    }
+    .btn-register {
+      background: transparent;
+      color: #4a90e2;
+      border: 2px solid #4a90e2;
+    }
+    .btn-register:hover {
+      background: #4a90e2;
+      color: white;
+    }
+    .btn-dashboard {
+      background: #28a745;
+      color: white;
+    }
+    .btn-dashboard:hover {
+      background: #218838;
+    }
+    .btn-logout {
+      background: #dc3545;
+      color: white;
+    }
+    .btn-logout:hover {
+      background: #c82333;
+    }
+    .user-greeting {
+      color: var(--text-color, #333);
+      font-weight: 500;
+      margin-right: 10px;
+    }
+    #auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    #user-menu {
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
 </head>
 <body>
+  <!-- Auth Navigation -->
+  <div class="auth-nav">
+    <div id="auth-buttons">
+      <a href="/login" class="btn-login">Anmelden</a>
+      <a href="/register" class="btn-register">Registrieren</a>
+    </div>
+    <div id="user-menu">
+      <span class="user-greeting">Hallo, <span id="nav-username"></span>!</span>
+      <a href="/dashboard" class="btn-dashboard" id="dashboard-link" style="display: none;">Dashboard</a>
+      <button class="btn-logout" id="logout-btn">Abmelden</button>
+    </div>
+  </div>
+
   <main class="main-content">
     <slot />
   </main>
 
   <script>
+    // Update Auth Navigation based on login status
+    function updateAuthNavigation() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      
+      const authButtons = document.getElementById('auth-buttons');
+      const userMenu = document.getElementById('user-menu');
+      const navUsername = document.getElementById('nav-username');
+      const dashboardLink = document.getElementById('dashboard-link');
+      
+      if (isLoggedIn && currentUser) {
+        // User ist angemeldet
+        if (authButtons) authButtons.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'flex';
+        if (navUsername) navUsername.textContent = currentUser.username;
+        
+        // Dashboard-Link NUR für Admins anzeigen
+        if (dashboardLink) {
+          dashboardLink.style.display = (currentUser.isAdmin === true) ? 'inline-block' : 'none';
+        }
+      } else {
+        // User ist nicht angemeldet
+        if (authButtons) authButtons.style.display = 'flex';
+        if (userMenu) userMenu.style.display = 'none';
+      }
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      updateAuthNavigation();
+      
+      // Logout Button
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('currentUser');
+          localStorage.removeItem('isLoggedIn');
+          window.location.href = '/';
+        });
+      }
+    });
+
     // Theme Toggle (falls vorhanden)
     const themeToggle = document.getElementById('nightModeBtn');
     if (themeToggle) {

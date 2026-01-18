@@ -46,14 +46,19 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
               🌙 Night Mode
             </button>
             <button id="translateBtn" aria-label="Switch Language">🌐 EN</button>
-            <button id="abmelden" class="btn-login" data-translate="nav-logout">Abmelden</button>
-            <button id="registrieren" class="btn-register" data-translate="nav-register">Registrieren</button>
+            <div id="auth-buttons">
+              <button id="anmelden" class="btn-login" data-translate="nav-login">Anmelden</button>
+              <button id="registrieren" class="btn-register" data-translate="nav-register">Registrieren</button>
+            </div>
+            <div id="user-menu" style="display: none;">
+              <span id="user-greeting">Hallo, <span id="nav-username"></span>!</span>
+              <button id="dashboard-link" class="btn-dashboard">Dashboard</button>
+              <button id="logout-btn" class="btn-logout">Abmelden</button>
+            </div>
           </div>
         </div>
       </nav>
     </section>
-  </header>
-    </nav>
   </header>
 
   <main class="main-content">
@@ -113,20 +118,71 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
       mobileMenuToggle?.classList.toggle('active');
     });
 
-    // Auth Button Update
-    const authButton = document.getElementById('auth-button') as HTMLAnchorElement | null;
-    if (authButton) {
-      const user = localStorage.getItem('currentUser');
-      if (user) {
-        authButton.textContent = 'Logout';
-        authButton.href = '#';
-        authButton.addEventListener('click', (e) => {
-          e.preventDefault();
+    // Update Auth Navigation based on login status
+    function updateAuthNavigation() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      
+      const authButtons = document.getElementById('auth-buttons');
+      const userMenu = document.getElementById('user-menu');
+      const navUsername = document.getElementById('nav-username');
+      
+      if (isLoggedIn && currentUser) {
+        // User ist angemeldet
+        if (authButtons) authButtons.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'flex';
+        if (navUsername) navUsername.textContent = currentUser.username;
+        
+        // Dashboard-Button nur für Admins anzeigen
+        const dashboardLink = document.getElementById('dashboard-link');
+        if (dashboardLink) {
+          dashboardLink.style.display = currentUser.isAdmin ? 'block' : 'none';
+        }
+      } else {
+        // User ist nicht angemeldet
+        if (authButtons) authButtons.style.display = 'flex';
+        if (userMenu) userMenu.style.display = 'none';
+      }
+    }
+
+    // Event Listeners für Auth-Buttons
+    document.addEventListener('DOMContentLoaded', () => {
+      updateAuthNavigation();
+      
+      // Anmelden Button
+      const anmeldenBtn = document.getElementById('anmelden');
+      if (anmeldenBtn) {
+        anmeldenBtn.addEventListener('click', () => {
+          window.location.href = '/login';
+        });
+      }
+      
+      // Registrieren Button
+      const registrierenBtn = document.getElementById('registrieren');
+      if (registrierenBtn) {
+        registrierenBtn.addEventListener('click', () => {
+          window.location.href = '/register';
+        });
+      }
+      
+      // Dashboard Button
+      const dashboardBtn = document.getElementById('dashboard-link');
+      if (dashboardBtn) {
+        dashboardBtn.addEventListener('click', () => {
+          window.location.href = '/dashboard';
+        });
+      }
+      
+      // Logout Button
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
           localStorage.removeItem('currentUser');
+          localStorage.removeItem('isLoggedIn');
           window.location.href = '/';
         });
       }
-    }
+    });
 
     // Active Link Highlighting
     const currentPath = window.location.pathname;

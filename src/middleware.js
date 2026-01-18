@@ -3,7 +3,7 @@
 const MAINTENANCE_MODE = false;
 
 export async function onRequest(context, next) {
-  const { url, redirect, cookies } = context;
+  const { url, redirect } = context;
   
   // Prüfe ob Wartungsmodus aktiv ist
   const isMaintenanceMode = MAINTENANCE_MODE;
@@ -15,32 +15,16 @@ export async function onRequest(context, next) {
     '/profile',
     '/login',
     '/register',
-    '/api/'
+    '/api/',
+    '/scripts/',
+    '/styles/'
   ];
   
   const isAllowedPath = allowedPaths.some(path => url.pathname.startsWith(path));
   
-  // Wenn Wartungsmodus aktiv
+  // Wenn Wartungsmodus aktiv und nicht auf erlaubtem Pfad
   if (isMaintenanceMode && !isAllowedPath) {
-    // Prüfe ob User Admin ist
-    const sessionId = cookies.get('session_id')?.value;
-    
-    if (sessionId) {
-      try {
-        // Importiere KV-Funktion dynamisch
-        const { validateSession } = await import('./lib/kv.ts');
-        const user = await validateSession(sessionId);
-        
-        // Wenn Admin, erlaube Zugriff
-        if (user?.isAdmin) {
-          return next();
-        }
-      } catch (error) {
-        console.error('Session validation error:', error);
-      }
-    }
-    
-    // Nicht-Admins zur Wartungsseite
+    // Nicht-Admins zur Wartungsseite (vereinfachte Logik für lokale Entwicklung)
     return redirect('/maintenance');
   }
   

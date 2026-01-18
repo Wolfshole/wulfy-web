@@ -65,12 +65,15 @@ function showMessage(elementId, message, isError = false) {
   if (messageElement) {
     messageElement.textContent = message;
     messageElement.style.display = 'block';
+    messageElement.className = isError ? 'error-message' : 'success-message';
     
     // Nachricht nach 5 Sekunden ausblenden
     setTimeout(() => {
       messageElement.style.display = 'none';
     }, 5000);
   }
+  
+  console.log(`[AUTH] ${isError ? 'ERROR' : 'INFO'}: ${message}`);
 }
 
 // Login-Formular
@@ -120,7 +123,14 @@ if (loginForm) {
       
       // Weiterleitung nach 1 Sekunde
       setTimeout(() => {
-        window.location.href = '/dashboard';
+        // Versuche zuerst Dashboard, dann Fallback zur Hauptseite
+        const targetUrl = '/dashboard';
+        try {
+          window.location.href = targetUrl;
+        } catch (error) {
+          console.error('Dashboard redirect failed, using fallback:', error);
+          window.location.href = '/';
+        }
       }, 1000);
     } else {
       showMessage('error-message', 'Benutzername oder Passwort falsch!', true);
