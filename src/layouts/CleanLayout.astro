@@ -81,6 +81,15 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
       align-items: center;
       gap: 10px;
     }
+    .btn-profile {
+      background: #f5f5f5;
+      color: #4a90e2;
+      border: 2px solid #4a90e2;
+      margin-left: 5px;
+    }
+    .btn-profile:hover {
+      background: #4a90e2;
+      color: #fff;
   </style>
 </head>
 <body>
@@ -89,10 +98,12 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
     <div id="auth-buttons">
       <a href="/login" class="btn-login">Anmelden</a>
       <a href="/register" class="btn-register">Registrieren</a>
+      <a href="/profile" class="btn-profile" id="profile-link-public" style="display: none;">Profil</a>
     </div>
     <div id="user-menu">
       <span class="user-greeting">Hallo, <span id="nav-username"></span>!</span>
       <a href="/dashboard" class="btn-dashboard" id="dashboard-link" style="display: none;">Dashboard</a>
+      <a href="/profile" class="btn-profile" id="profile-link-admin" style="display: none;">Profil</a>
       <button class="btn-logout" id="logout-btn">Abmelden</button>
     </div>
   </div>
@@ -111,21 +122,28 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
       const userMenu = document.getElementById('user-menu');
       const navUsername = document.getElementById('nav-username');
       const dashboardLink = document.getElementById('dashboard-link');
+      const profileLinkPublic = document.getElementById('profile-link-public');
+      const profileLinkAdmin = document.getElementById('profile-link-admin');
       
       if (isLoggedIn && currentUser) {
         // User ist angemeldet
         if (authButtons) authButtons.style.display = 'none';
         if (userMenu) userMenu.style.display = 'flex';
         if (navUsername) navUsername.textContent = currentUser.username;
-        
         // Dashboard-Link NUR für Admins anzeigen
         if (dashboardLink) {
           dashboardLink.style.display = (currentUser.isAdmin === true) ? 'inline-block' : 'none';
         }
+        // Profil-Link für Admins neben Dashboard anzeigen
+        if (profileLinkAdmin) profileLinkAdmin.style.display = 'inline-block';
+        if (profileLinkPublic) profileLinkPublic.style.display = 'none';
       } else {
         // User ist nicht angemeldet
         if (authButtons) authButtons.style.display = 'flex';
         if (userMenu) userMenu.style.display = 'none';
+        // Profil-Link für alle anzeigen
+        if (profileLinkPublic) profileLinkPublic.style.display = 'inline-block';
+        if (profileLinkAdmin) profileLinkAdmin.style.display = 'none';
       }
     }
 

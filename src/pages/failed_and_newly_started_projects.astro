@@ -1,5 +1,7 @@
 ---
 import CleanLayout from "../layouts/CleanLayout.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import "../styles/cookie-banner.css";
 import "../styles/footer.css";
 import "../styles/pages.css";
 import "../styles/nightmode.css";
@@ -9,6 +11,7 @@ import "../styles/translate.css";
 
 <CleanLayout title="Gescheiterte und neu angefangende Projekte">
     <body>
+        <CookieBanner />
         <main>
             <article>
                 <section class="list-with-all">

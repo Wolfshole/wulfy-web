@@ -2,9 +2,11 @@
 import CleanLayout from "../layouts/CleanLayout.astro";
 import "../styles/footer.css";
 import "../styles/index.css";
+import "../styles/cookie-banner.css";
 import "../styles/nightmode.css";
 import "../styles/responsive-utilities.css";
 import "../styles/translate.css";
+import CookieBanner from "../components/CookieBanner.astro";
 ---
 
 <CleanLayout title="Willkommen auf der Web seite von Wulfy">
@@ -22,6 +24,7 @@ import "../styles/translate.css";
 			Hier werdet ihr meine Projekte, Updates und vieles mehr finden.
 			Ich werde versuchen, die Seite regelmäßig zu aktualisieren und immer auf dem Laufenden zu halten.
 		</p>
+		<CookieBanner />
 	    </section>
 	    </article>
 	</main>
@@ -56,6 +59,7 @@ import "../styles/translate.css";
 						<li><a href="/about" data-translate="nav-about">Über mich</a></li>
 						<li><a href="/projects" data-translate="nav-projects">Projekte</a></li>
 						<li><a href="/faq" data-translate="nav-faq">FAQ</a></li>
+						<li><a href="/tea-client" data-translate="nav-tea-client">Tea Client</a></li>
 					</ul>
 				</div>
 				<div class="footer-section">

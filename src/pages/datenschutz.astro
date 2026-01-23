@@ -1,0 +1,38 @@
+---
+import CleanLayout from "../layouts/CleanLayout.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import "../styles/cookie-banner.css";
+---
+
+<CleanLayout title="Datenschutzerklärung">
+  <body>
+    <main>
+      <article>
+        <h1>Datenschutzerklärung</h1>
+        <section>
+          <h2>1. Allgemeine Hinweise</h2>
+          <p>
+            Der Schutz deiner persönlichen Daten ist uns wichtig. Nachfolgend informieren wir dich über die Erhebung und Verwendung personenbezogener Daten bei Nutzung dieser Webseite und des Tea Clients.
+          </p>
+          <h2>2. Erhebung und Verarbeitung von Daten</h2>
+          <p>
+            Es werden nur die Daten erhoben, die für die Nutzung der Webseite und des Tea Clients erforderlich sind. Eine Weitergabe an Dritte erfolgt nicht ohne deine ausdrückliche Zustimmung.
+          </p>
+          <h2>3. Cookies</h2>
+          <p>
+            Diese Webseite verwendet keine Cookies zur Nachverfolgung oder Analyse.
+          </p>
+          <h2>4. Rechte der Nutzer</h2>
+          <p>
+            Du hast das Recht auf Auskunft, Berichtigung und Löschung deiner gespeicherten Daten. Bei Fragen wende dich bitte an die Betreiber der Webseite.
+          </p>
+          <h2>5. Änderungen</h2>
+          <p>
+            Diese Datenschutzerklärung kann jederzeit ohne vorherige Ankündigung geändert werden.
+          </p>
+        </section>
+          <CookieBanner />
+      </article>
+    </main>
+  </body>
+</CleanLayout>

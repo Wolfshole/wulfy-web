@@ -1,0 +1,25 @@
+---
+import "../styles/cookie-banner.css";
+---
+
+<div id="cookie-banner" class="cookie-banner" style="display: none;">
+  <span>Diese Webseite verwendet keine Cookies zur Nachverfolgung oder Analyse.</span>
+  <button onclick="document.getElementById('cookie-banner').style.display='none'">Verstanden</button>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    if (!localStorage.getItem('cookieBannerAccepted')) {
+      const banner = document.getElementById('cookie-banner');
+      if (banner) {
+        banner.style.display = 'flex';
+      }
+    }
+    const cookieButton = document.querySelector('#cookie-banner button');
+    if (cookieButton) {
+      cookieButton.addEventListener('click', function() {
+        localStorage.setItem('cookieBannerAccepted', 'true');
+      });
+    }
+  });
+</script>
