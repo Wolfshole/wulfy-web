@@ -29,8 +29,9 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   // Prüfe Environment Variables
   const clientId = import.meta.env.DISCORD_CLIENT_ID;
   const clientSecret = import.meta.env.DISCORD_CLIENT_SECRET;
+  const redirectUri = import.meta.env.DISCORD_REDIRECT_URI;
   
-  if (!clientId || !clientSecret) {
+  if (!clientId || !clientSecret || !redirectUri) {
     console.error('Discord OAuth not configured - missing environment variables');
     return redirect('/login?error=oauth_not_configured');
   }
@@ -47,7 +48,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         client_secret: clientSecret,
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: `${url.origin}/api/auth/callback/discord`
+        redirect_uri: redirectUri
       })
     });
     

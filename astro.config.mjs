@@ -6,4 +6,11 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
   output: 'server',
   adapter: vercel(),
+  server: {
+    // @ts-ignore
+    proxy: {
+      '/profile': 'http://localhost:3000',
+      '/dashboard': 'http://localhost:3000'
+    }
+  }
 });
