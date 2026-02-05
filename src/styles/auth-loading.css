@@ -1,0 +1,28 @@
+/* Auth Loading Styles */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #1a1a2e;
+  color: white;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.loader {
+  text-align: center;
+}
+
+.spinner {
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
