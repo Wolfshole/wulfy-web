@@ -1,10 +1,20 @@
 ---
+import { validateSession } from '../lib/kv';
+
 interface Props {
   title?: string;
   description?: string;
 }
 
 const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.props;
+
+// Session-Validierung
+const sessionId = Astro.cookies.get('session_id')?.value;
+let user = null;
+
+if (sessionId) {
+  user = await validateSession(sessionId);
+}
 ---
 
 <!DOCTYPE html>
@@ -68,9 +78,10 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
       background: #c82333;
     }
     .user-greeting {
-      color: var(--text-color, #333);
-      font-weight: 500;
+      color: #ffffff;
+      font-weight: 600;
       margin-right: 10px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
     #auth-buttons {
       display: flex;
@@ -95,17 +106,20 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
 <body>
   <!-- Auth Navigation -->
   <div class="auth-nav">
+    {!user && (
     <div id="auth-buttons">
       <a href="/login" class="btn-login">Anmelden</a>
       <a href="/register" class="btn-register">Registrieren</a>
-      <a href="/profile" class="btn-profile" id="profile-link-public" style="display: none;">Profil</a>
     </div>
-    <div id="user-menu">
-      <span class="user-greeting">Hallo, <span id="nav-username"></span>!</span>
-      <a href="/dashboard" class="btn-dashboard" id="dashboard-link" style="display: none;">Dashboard</a>
-      <a href="/profile" class="btn-profile" id="profile-link-admin" style="display: none;">Profil</a>
-      <button class="btn-logout" id="logout-btn">Abmelden</button>
+    )}
+    {user && (
+    <div id="user-menu" style="display: flex;">
+      <span class="user-greeting">Hallo, <span id="nav-username">{user.username}</span>!</span>
+      {user.isAdmin && <a href="/dashboard" class="btn-dashboard">Dashboard</a>}
+      <a href="/profile" class="btn-profile">Profil</a>
+      <a href="/api/auth/logout" class="btn-logout">Abmelden</a>
     </div>
+    )}
   </div>
 
   <main class="main-content">
@@ -113,55 +127,9 @@ const { title = 'Wulfy Web', description = 'Willkommen bei Wulfy Web' } = Astro.
   </main>
 
   <script>
-    // Update Auth Navigation based on login status
-    function updateAuthNavigation() {
-      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-      
-      const authButtons = document.getElementById('auth-buttons');
-      const userMenu = document.getElementById('user-menu');
-      const navUsername = document.getElementById('nav-username');
-      const dashboardLink = document.getElementById('dashboard-link');
-      const profileLinkPublic = document.getElementById('profile-link-public');
-      const profileLinkAdmin = document.getElementById('profile-link-admin');
-      
-      if (isLoggedIn && currentUser) {
-        // User ist angemeldet
-        if (authButtons) authButtons.style.display = 'none';
-        if (userMenu) userMenu.style.display = 'flex';
-        if (navUsername) navUsername.textContent = currentUser.username;
-        // Dashboard-Link NUR für Admins anzeigen
-        if (dashboardLink) {
-          dashboardLink.style.display = (currentUser.isAdmin === true) ? 'inline-block' : 'none';
-        }
-        // Profil-Link für Admins neben Dashboard anzeigen
-        if (profileLinkAdmin) profileLinkAdmin.style.display = 'inline-block';
-        if (profileLinkPublic) profileLinkPublic.style.display = 'none';
-      } else {
-        // User ist nicht angemeldet
-        if (authButtons) authButtons.style.display = 'flex';
-        if (userMenu) userMenu.style.display = 'none';
-        // Profil-Link für alle anzeigen
-        if (profileLinkPublic) profileLinkPublic.style.display = 'inline-block';
-        if (profileLinkAdmin) profileLinkAdmin.style.display = 'none';
-      }
-    }
-
-    // Event Listeners
-    document.addEventListener('DOMContentLoaded', () => {
-      updateAuthNavigation();
-      
-      // Logout Button
-      const logoutBtn = document.getElementById('logout-btn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-          localStorage.removeItem('currentUser');
-          localStorage.removeItem('isLoggedIn');
-          window.location.href = '/';
-        });
-      }
-    });
-
+    // Navigation wird jetzt serverseitig gerendert
+    // Kein LocalStorage-Check mehr nötig
+    
     // Theme Toggle (falls vorhanden)
     const themeToggle = document.getElementById('nightModeBtn');
     if (themeToggle) {

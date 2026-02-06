@@ -116,22 +116,14 @@ const AdminStorage = {
 
 // Auth-Check bei Seitenaufruf
 document.addEventListener('DOMContentLoaded', () => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  // Auth wird jetzt serverseitig im Astro-Template geprüft
+  // Wenn wir hier sind, ist der User bereits authentifiziert
   
-  // Wenn nicht eingeloggt, zum Login umleiten
-  if (!isLoggedIn) {
-    alert('Du musst angemeldet sein, um das Dashboard zu sehen!');
-    window.location.href = '/login';
-    return;
-  }
+  // User-Daten aus dem DOM holen (vom Server gerendert)
+  const userNameElement = document.getElementById('user-name');
+  const userName = userNameElement ? userNameElement.textContent.trim() : 'Admin';
   
-  // Admin-Check
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  if (!currentUser || !currentUser.isAdmin) {
-    alert('Zugriff verweigert! Nur Admins haben Zugriff auf das Dashboard.');
-    window.location.href = '/';
-    return;
-  }
+  console.log('✅ Dashboard geladen für:', userName);
   
   // Dashboard initialisieren
   initDashboard(currentUser);

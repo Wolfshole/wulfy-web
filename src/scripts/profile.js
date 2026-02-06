@@ -106,18 +106,11 @@ function displayProfilePicture() {
 
 // Profilinformationen laden
 function loadProfileInfo() {
-  const user = AuthStorage.getUser();
+  // Auth wird jetzt serverseitig geprüft
+  // User-Daten sind bereits im DOM vom Server gerendert
+  // Kein LocalStorage-Check mehr nötig
   
-  if (!user) {
-    // Nicht eingeloggt - zur Login-Seite umleiten
-    window.location.href = '/login';
-    return;
-  }
-  
-  // Benutzerdaten anzeigen
-  const usernameEl = document.getElementById('profile-username');
-  const emailEl = document.getElementById('profile-email');
-  const registeredEl = document.getElementById('profile-registered');
+  console.log('✅ Profil geladen - Daten vom Server gerendert');
   
   if (usernameEl) usernameEl.textContent = user.username;
   if (emailEl) emailEl.textContent = user.email;
