@@ -1,15 +1,33 @@
 ---
 import CleanLayout from "../layouts/CleanLayout.astro";
+import EmailVerificationBanner from "../components/EmailVerificationBanner.astro";
+import { validateSession } from "../lib/kv";
 import "../styles/dashboard.css";
 import "../styles/nightmode.css";
 import "../styles/profile.css";
 import "../styles/responsive-utilities.css";
 import "../styles/translate.css";
+
+// Session-Validierung
+const sessionId = Astro.cookies.get('session_id')?.value;
+let user = null;
+
+if (sessionId) {
+  user = await validateSession(sessionId);
+}
+
+// Redirect wenn nicht eingeloggt
+if (!user) {
+  return Astro.redirect('/login');
+}
 ---
 
 <CleanLayout title="Mein Profil">
   <body>
 	<main class="dashboard-container">
+	  <!-- E-Mail-Verifikations-Banner -->
+	  <EmailVerificationBanner email={user.email} verified={user.emailVerified || false} />
+	  
 	  <div class="dashboard-header">
 		<h1>Mein Profil 👤</h1>
 		<p>Verwalte deine Profilinformationen</p>
@@ -44,20 +62,24 @@ import "../styles/translate.css";
 		  <h2>Deine Informationen</h2>
 		  <div class="info-item">
 			<span class="info-label">Benutzername:</span>
-			<span class="info-value" id="profile-username">-</span>
+			<span class="info-value" id="profile-username">{user.username}</span>
 		  </div>
 		  <div class="info-item">
 			<span class="info-label">E-Mail:</span>
-			<span class="info-value" id="profile-email">-</span>
+			<span class="info-value" id="profile-email">{user.email}</span>
+			{user.emailVerified && <span style="color: #48bb78; margin-left: 8px;">✓ Bestätigt</span>}
+			{!user.emailVerified && <span style="color: #f56565; margin-left: 8px;">⚠ Nicht bestätigt</span>}
 		  </div>
 		  <div class="info-item">
 			<span class="info-label">Registriert seit:</span>
-			<span class="info-value" id="profile-registered">-</span>
+			<span class="info-value" id="profile-registered">{new Date(user.createdAt).toLocaleDateString('de-DE')}</span>
 		  </div>
-		  <div class="info-item" id="admin-status-container" style="display: none;">
+		  {user.isAdmin && (
+		  <div class="info-item">
 			<span class="info-label">Status:</span>
 			<span class="info-value" style="color: #f39c12; font-weight: bold;">👑 Administrator</span>
 		  </div>
+		  )}
 		</div>
 	  </div>
 	</main>

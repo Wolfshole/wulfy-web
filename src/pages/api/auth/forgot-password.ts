@@ -5,8 +5,10 @@ import { sendPasswordResetEmail } from '../../../lib/email';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    console.log('🔍 Forgot-Password API aufgerufen');
     const data = await request.json();
     const { email } = data;
+    console.log('📧 E-Mail erhalten:', email);
 
     if (!email) {
       return new Response(JSON.stringify({ error: 'E-Mail ist erforderlich' }), {
@@ -16,7 +18,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // User finden
+    console.log('🔎 Suche User...');
     const user = await getUserByEmail(email);
+    console.log('👤 User gefunden:', user ? `${user.username} (${user.provider})` : 'NICHT GEFUNDEN');
     
     // Aus Sicherheitsgründen immer Erfolg zurückgeben (auch wenn User nicht existiert)
     // So kann man nicht herausfinden, welche E-Mails registriert sind
@@ -40,7 +44,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Token erstellen
+    console.log('🔑 Erstelle Reset-Token...');
     const token = await createPasswordResetToken(email);
+    console.log('✓ Token erstellt:', token?.substring(0, 20) + '...');
     
     if (!token) {
       return new Response(JSON.stringify({ error: 'Fehler beim Erstellen des Reset-Tokens' }), {
@@ -50,7 +56,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // E-Mail senden
+    console.log('📤 Sende E-Mail an:', user.email);
     const success = await sendPasswordResetEmail(user.email, user.username, token);
+    console.log('📬 E-Mail-Versand-Ergebnis:', success ? 'ERFOLG' : 'FEHLER');
 
     if (!success) {
       // Für Entwicklung: Gib eine hilfreiche Nachricht

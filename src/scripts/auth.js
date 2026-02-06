@@ -79,7 +79,7 @@ function showMessage(elementId, message, isError = false) {
 // Login-Formular
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
-  loginForm.addEventListener('submit', (e) => {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const username = document.getElementById('username').value.trim();
@@ -92,48 +92,52 @@ if (loginForm) {
       return;
     }
     
-    // Benutzer suchen
-    const user = AuthStorage.findUser(username, password);
-    
-    if (user) {
-      // Login erfolgreich - Admin-Status prüfen und aktualisieren
-      const isAdmin = AuthStorage.checkIfAdmin(user.username);
+    try {
+      // Prüfe ob User in LocalStorage existiert (für Migration)
+      const localStorageUser = AuthStorage.findUser(username, password);
       
-      // Admin-Status im gespeicherten Benutzer aktualisieren, falls nicht vorhanden
-      if (isAdmin && !user.isAdmin) {
-        const users = AuthStorage.getUsers();
-        const userIndex = users.findIndex(u => u.username === user.username);
-        if (userIndex !== -1) {
-          users[userIndex].isAdmin = true;
-          localStorage.setItem('registeredUsers', JSON.stringify(users));
+      // Server-Login
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: username, // Username kann auch E-Mail sein
+          password: password,
+          migrateFromLocalStorage: localStorageUser // Falls in LocalStorage gefunden
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        console.log('✅ Login erfolgreich:', data);
+        
+        // LocalStorage aufräumen nach erfolgreicher Migration
+        if (localStorageUser) {
+          console.log('🧹 Räume LocalStorage auf nach Migration');
+          // Behalte registeredUsers für andere potenzielle User, aber lösche alte Session-Daten
+          AuthStorage.clearUser();
         }
+        
+        showMessage('success-message', 'Login erfolgreich! Weiterleitung...');
+        
+        // Weiterleitung nach 1 Sekunde
+        setTimeout(() => {
+          if (data.user?.isAdmin) {
+            window.location.href = '/dashboard';
+          } else {
+            window.location.href = '/profile';
+          }
+        }, 1000);
+      } else {
+        console.error('❌ Login fehlgeschlagen:', data);
+        showMessage('error-message', data.error || 'Login fehlgeschlagen!', true);
       }
-      
-      const userData = {
-        username: user.username,
-        email: user.email,
-        registeredDate: user.registeredDate,
-        rememberMe: remember,
-        isAdmin: isAdmin,
-        profilePicture: user.profilePicture // Profilbild beibehalten
-      };
-      
-      AuthStorage.setUser(userData);
-      showMessage('success-message', 'Login erfolgreich! Weiterleitung...');
-      
-      // Weiterleitung nach 1 Sekunde
-      setTimeout(() => {
-        // Versuche zuerst Dashboard, dann Fallback zur Hauptseite
-        const targetUrl = '/dashboard';
-        try {
-          window.location.href = targetUrl;
-        } catch (error) {
-          console.error('Dashboard redirect failed, using fallback:', error);
-          window.location.href = '/';
-        }
-      }, 1000);
-    } else {
-      showMessage('error-message', 'Benutzername oder Passwort falsch!', true);
+    } catch (error) {
+      console.error('❌ Login-Fehler:', error);
+      showMessage('error-message', 'Verbindungsfehler. Bitte versuche es erneut.', true);
     }
   });
 }
@@ -141,7 +145,7 @@ if (loginForm) {
 // Registrierungs-Formular
 const registerForm = document.getElementById('register-form');
 if (registerForm) {
-  registerForm.addEventListener('submit', (e) => {
+  registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const username = document.getElementById('username').value.trim();
@@ -183,6 +187,50 @@ if (registerForm) {
       return;
     }
     
+    try {
+      // API-Aufruf zur Registrierung
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, email, password })
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok) {
+        showMessage('success-message', 'Registrierung erfolgreich! Weiterleitung...');
+        
+        // Weiterleitung nach 1 Sekunde
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 1000);
+      } else {
+        showMessage('error-message', result.error || 'Registrierung fehlgeschlagen!', true);
+      }
+    } catch (error) {
+      console.error('Registrierungs-Fehler:', error);
+      showMessage('error-message', 'Netzwerkfehler. Bitte versuche es erneut!', true);
+    }
+  });
+}
+
+// ALTE LocalStorage-Registrierung (DEAKTIVIERT)
+/*
+const registerFormOld = document.getElementById('register-form-old');
+if (registerFormOld) {
+  registerFormOld.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const termsAccepted = document.getElementById('terms').checked;
+    
+    // ... alter Code ...
+    
     // Prüfen ob Benutzer bereits existiert
     if (AuthStorage.userExists(username, email)) {
       showMessage('error-message', 'Benutzername oder E-Mail bereits vergeben!', true);
@@ -208,6 +256,7 @@ if (registerForm) {
     }, 2000);
   });
 }
+*/
 
 // Anmelden-Button auf der Hauptseite
 const anmeldenBtn = document.getElementById('anmelden');

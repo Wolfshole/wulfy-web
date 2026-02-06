@@ -1,15 +1,30 @@
 ---
 import CleanLayout from "../layouts/CleanLayout.astro";
+import EmailVerificationBanner from "../components/EmailVerificationBanner.astro";
+import { validateSession } from "../lib/kv";
 import "../styles/dashboard.css";
 import "../styles/nightmode.css";
 import "../styles/responsive-utilities.css";
 import "../styles/translate.css";
+
+// Session-Validierung
+const sessionId = Astro.cookies.get('session_id')?.value;
+let user = null;
+
+if (sessionId) {
+  user = await validateSession(sessionId);
+}
+
+// Redirect wenn nicht eingeloggt
+if (!user) {
+  return Astro.redirect('/login');
+}
 ---
 
 <CleanLayout title="Dashboard">
 	<main class="dashboard-container">
 	  <div class="dashboard-header">
-		<h1>👑 Admin Dashboard - Willkommen, <span id="user-name">Admin</span>!</h1>
+		<h1>👑 Admin Dashboard - Willkommen, <span id="user-name">{user.username}</span>!</h1>
 		<p>Verwaltungszentrale für deine Webseite</p>
 	  </div>
 
