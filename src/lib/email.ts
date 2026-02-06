@@ -1,14 +1,27 @@
 // E-Mail-Versand mit Resend
 import { Resend } from 'resend';
+import { config } from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+// Lade .env und .env.local
+const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: resolve(__dirname, '../../.env') });
+config({ path: resolve(__dirname, '../../.env.local'), override: true });
 
 export async function sendVerificationEmail(email: string, username: string, token: string) {
   // Prüfe ob Resend konfiguriert ist
   const apiKey = process.env.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
   const emailFrom = process.env.EMAIL_FROM || import.meta.env.EMAIL_FROM;
-  const siteUrl = import.meta.env.PUBLIC_SITE_URL || process.env.PUBLIC_SITE_URL;
+  const siteUrl = import.meta.env.PUBLIC_SITE_URL || process.env.PUBLIC_SITE_URL || 'http://localhost:4321';
+  
+  console.log('📧 E-Mail wird vorbereitet...');
+  console.log('API Key vorhanden:', apiKey ? 'Ja' : 'NEIN');
+  console.log('Email From:', emailFrom);
+  console.log('Site URL:', siteUrl);
   
   if (!apiKey || apiKey === 're_123456789_YourResendAPIKey') {
-    console.warn('Resend API-Key nicht konfiguriert - E-Mail kann nicht gesendet werden');
+    console.warn('⚠️ Resend API-Key nicht konfiguriert - E-Mail kann nicht gesendet werden');
     console.log('\n🔗 Verifikations-Link (nur für Entwicklung):', `${siteUrl}/api/auth/verify-email?token=${token}\n`);
     return false;
   }
@@ -66,7 +79,7 @@ export async function sendPasswordResetEmail(email: string, username: string, to
   // Prüfe ob Resend konfiguriert ist
   const apiKey = process.env.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
   const emailFrom = process.env.EMAIL_FROM || import.meta.env.EMAIL_FROM;
-  const siteUrl = import.meta.env.PUBLIC_SITE_URL || process.env.PUBLIC_SITE_URL;
+  const siteUrl = import.meta.env.PUBLIC_SITE_URL || process.env.PUBLIC_SITE_URL || 'http://localhost:4321';
   
   console.log('API Key vorhanden:', apiKey ? `Ja (${apiKey.substring(0, 10)}...)` : 'NEIN');
   console.log('Email From:', emailFrom);

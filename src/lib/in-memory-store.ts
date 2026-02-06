@@ -35,6 +35,19 @@ class InMemoryStore {
     this.store.delete(key);
   }
   
+  keys(pattern: string): string[] {
+    const keys: string[] = [];
+    const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
+    
+    for (const key of this.store.keys()) {
+      if (regex.test(key)) {
+        keys.push(key);
+      }
+    }
+    
+    return keys;
+  }
+  
   async ping(): Promise<string> {
     return 'PONG';
   }

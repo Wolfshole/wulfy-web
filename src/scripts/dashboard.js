@@ -115,7 +115,7 @@ const AdminStorage = {
 };
 
 // Auth-Check bei Seitenaufruf
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Auth wird jetzt serverseitig im Astro-Template geprüft
   // Wenn wir hier sind, ist der User bereits authentifiziert
   
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('✅ Dashboard geladen für:', userName);
   
   // Dashboard initialisieren
-  initDashboard(currentUser);
+  await initDashboard({ username: userName });
   
   // Event Listeners
   setupEventListeners();
@@ -136,18 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Dashboard initialisieren
-function initDashboard(user) {
+async function initDashboard(user) {
   // Benutzername anzeigen
   const userNameElement = document.getElementById('user-name');
-  if (userNameElement) {
+  if (userNameElement && user.username) {
     userNameElement.textContent = user.username;
   }
   
   // Statistiken laden
-  loadStatistics();
+  await loadStatistics();
   
   // Benutzerliste laden
-  loadUsersList();
+  await loadUsersList();
   
   // Einstellungen laden
   loadSettings();
@@ -160,54 +160,68 @@ function initDashboard(user) {
 }
 
 // Statistiken laden
-function loadStatistics() {
-  const users = AdminStorage.getUsers();
-  const admins = users.filter(u => u.isAdmin);
-  
-  document.getElementById('total-users').textContent = users.length;
-  document.getElementById('total-admins').textContent = admins.length;
-  
-  const today = new Date();
-  document.getElementById('current-date').textContent = today.toLocaleDateString('de-DE', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
+async function loadStatistics() {
+  try {
+    const response = await fetch('/api/stats');
+    if (!response.ok) {
+      throw new Error('Fehler beim Laden der Statistiken');
+    }
+    
+    const data = await response.json();
+    
+    document.getElementById('total-users').textContent = data.totalUsers;
+    document.getElementById('total-admins').textContent = data.totalAdmins;
+    document.getElementById('site-status').textContent = data.siteStatus;
+    document.getElementById('current-date').textContent = data.currentDate;
+  } catch (error) {
+    console.error('❌ Fehler beim Laden der Statistiken:', error);
+    // Fallback-Werte anzeigen
+    document.getElementById('total-users').textContent = '-';
+    document.getElementById('total-admins').textContent = '-';
+  }
 }
 
 // Benutzerliste laden
-function loadUsersList(searchTerm = '') {
-  const users = AdminStorage.getUsers();
+async function loadUsersList(searchTerm = '') {
   const usersList = document.getElementById('users-list');
   
   if (!usersList) return;
   
-  // Filtern nach Suchbegriff
-  const filteredUsers = searchTerm 
-    ? users.filter(u => 
-        u.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        u.email.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : users;
-  
-  if (filteredUsers.length === 0) {
-    usersList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Keine Benutzer gefunden.</p>';
-    return;
-  }
-  
-  usersList.innerHTML = filteredUsers.map(user => {
-    const initials = getInitials(user.username);
-    const avatarHtml = user.profilePicture 
-      ? `<img src="${user.profilePicture}" class="user-avatar" alt="${user.username}">`
+  try {
+    const response = await fetch('/api/users/list');
+    if (!response.ok) {
+      throw new Error('Fehler beim Laden der Benutzerliste');
+    }
+    
+    const data = await response.json();
+    const users = data.users;
+    
+    // Filtern nach Suchbegriff
+    const filteredUsers = searchTerm 
+      ? users.filter(u => 
+          u.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          u.email.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : users;
+    
+    if (filteredUsers.length === 0) {
+      usersList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Keine Benutzer gefunden.</p>';
+      return;
+    }
+    
+    usersList.innerHTML = filteredUsers.map(user => {
+      const initials = getInitials(user.username);
+      const avatarHtml = user.avatar 
+      ? `<img src="${user.avatar}" class="user-avatar" alt="${user.username}">`
       : `<div class="user-avatar-placeholder">${initials}</div>`;
     
     const adminBadge = user.isAdmin ? '<span class="admin-badge">👑 ADMIN</span>' : '';
     
-    const registeredDate = new Date(user.registeredDate).toLocaleDateString('de-DE', {
+    const registeredDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('de-DE', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric'
-    });
+    }) : '-';
     
     return `
       <div class="user-item" data-username="${user.username}">
@@ -235,6 +249,10 @@ function loadUsersList(searchTerm = '') {
   
   // Swipe-to-delete Funktionalität hinzufügen
   initSwipeToDelete();
+  } catch (error) {
+    console.error('❌ Fehler beim Laden der Benutzerliste:', error);
+    usersList.innerHTML = '<p style="text-align: center; color: #f44; padding: 2rem;">Fehler beim Laden der Benutzerliste.</p>';
+  }
 }
 
 // Swipe-to-delete initialisieren
@@ -509,8 +527,8 @@ function setupEventListeners() {
   // Benutzer aktualisieren
   const refreshBtn = document.getElementById('refresh-users-btn');
   if (refreshBtn) {
-    refreshBtn.addEventListener('click', () => {
-      loadUsersList();
+    refreshBtn.addEventListener('click', async () => {
+      await loadUsersList();
       showMessage('Benutzerliste aktualisiert!', false);
     });
   }
@@ -518,8 +536,8 @@ function setupEventListeners() {
   // Benutzersuche
   const searchInput = document.getElementById('user-search');
   if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      loadUsersList(e.target.value);
+    searchInput.addEventListener('input', async (e) => {
+      await loadUsersList(e.target.value);
     });
   }
   

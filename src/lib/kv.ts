@@ -119,6 +119,35 @@ export async function getUserByUsername(username: string): Promise<User | null> 
   return await getUser(userId as string);
 }
 
+// Alle User abrufen
+export async function getAllUsers(): Promise<User[]> {
+  const client = await getStore();
+  const users: User[] = [];
+  
+  // Bei InMemoryStore
+  if (client instanceof InMemoryStore) {
+    const allKeys = client.keys('user:*');
+    for (const key of allKeys) {
+      const data = await client.get(key);
+      if (data) {
+        users.push(JSON.parse(data as string));
+      }
+    }
+    return users;
+  }
+  
+  // Bei Redis
+  const keys = await client.keys('user:*');
+  for (const key of keys) {
+    const data = await client.get(key);
+    if (data) {
+      users.push(JSON.parse(data as string));
+    }
+  }
+  
+  return users;
+}
+
 // Session erstellen
 // Standard: 365 Tage (1 Jahr) - User bleibt lange eingeloggt
 export async function createSession(
