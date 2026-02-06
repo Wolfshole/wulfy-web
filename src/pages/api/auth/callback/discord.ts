@@ -90,6 +90,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
       id: `discord_${discordUser.id}`,
       username: discordUser.username,
       email: discordUser.email || `${discordUser.username}@discord.local`,
+      emailVerified: true, // Discord-E-Mails sind bereits verifiziert
       avatar: discordUser.avatar ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : undefined,
       provider: 'discord' as const,
       isAdmin: isAdmin,

@@ -46,6 +46,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         id: `twitch_${twitchUser.id}`,
         username: twitchUser.display_name,
         email: twitchUser.email,
+        emailVerified: true, // Twitch-E-Mails sind bereits verifiziert
         avatar: twitchUser.profile_image_url,
         provider: 'twitch',
         isAdmin: false,

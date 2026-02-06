@@ -1,0 +1,30 @@
+---
+// E-Mail-Verifikations-Banner
+import "../styles/email-verification.css";
+
+export interface Props {
+  email: string;
+  verified: boolean;
+}
+
+const { email, verified } = Astro.props;
+---
+
+{!verified && (
+  <div class="verification-banner">
+    <div class="banner-content">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+      </svg>
+      <div class="message">
+        <h4>E-Mail-Adresse bestätigen</h4>
+        <p>Bitte bestätige deine E-Mail-Adresse <strong>{email}</strong>, um alle Funktionen nutzen zu können.</p>
+      </div>
+      <button id="resend-verification" class="resend-btn">
+        E-Mail erneut senden
+      </button>
+    </div>
+  </div>
+)}
+
+<script src="../scripts/email-verification.js"></script>

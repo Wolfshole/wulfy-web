@@ -45,6 +45,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         id: `google_${googleUser.id}`,
         username: googleUser.name,
         email: googleUser.email,
+        emailVerified: true, // Google-E-Mails sind bereits verifiziert
         avatar: googleUser.picture,
         provider: 'google',
         isAdmin: isAdminUser(googleUser.name, googleUser.email),
