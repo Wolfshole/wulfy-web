@@ -368,31 +368,39 @@ section.welcome p {
 }
 
 /* Night Mode */
-[data-theme="dark"] section.navigation {
+[data-theme="dark"] section.navigation,
+body.dark-mode section.navigation {
     background: var(--header-bg, #2a2a2a);
 }
 
-[data-theme="dark"] section.navigation nav a {
+[data-theme="dark"] section.navigation nav a,
+body.dark-mode section.navigation nav a {
     color: var(--link-color, #66b3ff);
 }
 
-[data-theme="dark"] section.navigation nav a:hover {
+[data-theme="dark"] section.navigation nav a:hover,
+body.dark-mode section.navigation nav a:hover {
     background-color: var(--nav-hover, #3a3a3a);
     color: var(--link-hover-color, #99ccff);
 }
 
 [data-theme="dark"] section.navigation .btn-login,
 [data-theme="dark"] section.navigation .btn-register,
-[data-theme="dark"] section.navigation #nightModeBtn {
+[data-theme="dark"] section.navigation #nightModeBtn,
+body.dark-mode section.navigation .btn-login,
+body.dark-mode section.navigation .btn-register,
+body.dark-mode section.navigation #nightModeBtn {
     background: var(--button-bg, #4da6ff);
     color: var(--button-text, #1a1a1a);
 }
 
-[data-theme="dark"] section.navigation .btn-login:hover {
+[data-theme="dark"] section.navigation .btn-login:hover,
+body.dark-mode section.navigation .btn-login:hover {
     background: #357abd;
 }
 
-[data-theme="dark"] section.navigation .btn-register:hover {
+[data-theme="dark"] section.navigation .btn-register:hover,
+body.dark-mode section.navigation .btn-register:hover {
     background: #229954;
 }
 
@@ -404,7 +412,16 @@ section.welcome p {
 [data-theme="dark"] .list-with-all,
 [data-theme="dark"] .newly-started-projects,
 [data-theme="dark"] .thx,
-[data-theme="dark"] section.welcome {
+[data-theme="dark"] section.welcome,
+body.dark-mode article,
+body.dark-mode aside section,
+body.dark-mode .about-me,
+body.dark-mode .projects,
+body.dark-mode .faq,
+body.dark-mode .list-with-all,
+body.dark-mode .newly-started-projects,
+body.dark-mode .thx,
+body.dark-mode section.welcome {
     background-color: #2a2a2a;
 }
 
@@ -414,13 +431,23 @@ section.welcome p {
 [data-theme="dark"] .list-with-all h1,
 [data-theme="dark"] .newly-started-projects h1,
 [data-theme="dark"] .thx h2,
-[data-theme="dark"] section.welcome h1 {
+[data-theme="dark"] section.welcome h1,
+body.dark-mode .about-me h1,
+body.dark-mode .projects h1,
+body.dark-mode .faq h1,
+body.dark-mode .list-with-all h1,
+body.dark-mode .newly-started-projects h1,
+body.dark-mode .thx h2,
+body.dark-mode section.welcome h1 {
     color: #e0e0e0;
 }
 
 [data-theme="dark"] .about-me h2,
 [data-theme="dark"] .projects h2,
-[data-theme="dark"] .faq h2 {
+[data-theme="dark"] .faq h2,
+body.dark-mode .about-me h2,
+body.dark-mode .projects h2,
+body.dark-mode .faq h2 {
     color: #8b9cff;
     border-top-color: #444;
 }
@@ -431,11 +458,20 @@ section.welcome p {
 [data-theme="dark"] .list-with-all p,
 [data-theme="dark"] .newly-started-projects p,
 [data-theme="dark"] .thx p,
-[data-theme="dark"] section.welcome p {
+[data-theme="dark"] section.welcome p,
+body.dark-mode .about-me p,
+body.dark-mode .projects p,
+body.dark-mode .faq p,
+body.dark-mode .list-with-all p,
+body.dark-mode .newly-started-projects p,
+body.dark-mode .thx p,
+body.dark-mode section.welcome p {
     color: #b0b0b0;
 }
 
 [data-theme="dark"] .projects a,
-[data-theme="dark"] .thx a {
+[data-theme="dark"] .thx a,
+body.dark-mode .projects a,
+body.dark-mode .thx a {
     color: #6ab0f3;
 }

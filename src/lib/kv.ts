@@ -1,76 +1,14 @@
-// Redis/Upstash für User-Daten mit In-Memory-Fallback
-import Redis from "ioredis";
-import InMemoryStore from "./in-memory-store";
-import { config } from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-
-// Lade .env und .env.local
-const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: resolve(__dirname, '../../.env') });
-config({ path: resolve(__dirname, '../../.env.local'), override: true });
-
-// Store-Initialisierung
-let storePromise: Promise<Redis | InMemoryStore> | null = null;
-
-async function initStore() {
-  console.log("🔍 Debug - process.env.REDIS_URL:", process.env.REDIS_URL ? "GEFUNDEN" : "NICHT GEFUNDEN");
-  console.log("🔍 Debug - ALL ENV VARS:", Object.keys(process.env).filter(k => k.includes('REDIS')));
-  
-  const redisUrl = process.env.REDIS_URL;
-
-  if (!redisUrl) {
-    console.warn("⚠️  REDIS_URL nicht gefunden - nutze In-Memory-Store");
-    console.warn("📝 Daten gehen bei Server-Neustart verloren!");
-    return new InMemoryStore();
-  }
-
-  try {
-    console.log("🔍 Verbinde mit Redis...");
-    const redis = new Redis(redisUrl, {
-      maxRetriesPerRequest: 3,
-      connectTimeout: 10000,
-      retryStrategy(times) {
-        if (times > 3) {
-          console.warn("❌ Redis-Verbindung nach 3 Versuchen fehlgeschlagen");
-          return null; // Stop retrying
-        }
-        const delay = Math.min(times * 200, 2000);
-        console.log(`🔄 Retry ${times}/3 in ${delay}ms...`);
-        return delay;
-      }
-    });
-
-    // Warte auf Verbindung
-    await redis.ping();
-    console.log("✅ Redis verbunden (Daten bleiben erhalten)");
-    return redis;
-  } catch (error) {
-    console.warn("⚠️  Redis-Verbindung fehlgeschlagen - nutze In-Memory-Store");
-    console.warn("📝 Daten gehen bei Server-Neustart verloren!");
-    console.error(
-      "Redis Error:",
-      error instanceof Error ? error.message : error,
-    );
-    return new InMemoryStore();
-  }
-}
-
-function getStore(): Promise<Redis | InMemoryStore> {
-  if (!storePromise) {
-    storePromise = initStore();
-  }
-  return storePromise;
-}
+// Datenspeicherung: Vercel KV (Produktion) oder In-Memory (lokal)
+// Kein ioredis nötig!
 
 export interface User {
   id: string;
   username: string;
   email: string;
   emailVerified: boolean;
-  password?: string; // Nur für 'local' Provider
+  password?: string;
   avatar?: string;
-  provider: "discord" | "google" | "apple" | "twitch" | "local";
+  provider: 'discord' | 'google' | 'apple' | 'twitch' | 'local';
   isAdmin: boolean;
   createdAt: string;
 }
@@ -80,159 +18,169 @@ export interface Session {
   expiresAt: number;
 }
 
-// User speichern
+// ─── In-Memory Store (lokal / Fallback) ─────────────────────────────────────
+const memStore = new Map<string, { value: string; expiresAt?: number }>();
+
+const mem = {
+  get: (key: string): string | null => {
+    const entry = memStore.get(key);
+    if (!entry) return null;
+    if (entry.expiresAt && entry.expiresAt < Date.now()) {
+      memStore.delete(key);
+      return null;
+    }
+    return entry.value;
+  },
+  set: (key: string, value: string, ttlSeconds?: number) => {
+    memStore.set(key, {
+      value,
+      expiresAt: ttlSeconds ? Date.now() + ttlSeconds * 1000 : undefined,
+    });
+  },
+  del: (key: string) => { memStore.delete(key); },
+  keys: (prefix: string): string[] =>
+    [...memStore.keys()].filter(k => k.startsWith(prefix)),
+};
+
+// ─── Vercel KV (Produktion) ──────────────────────────────────────────────────
+let kv: any = null;
+
+async function getKV() {
+  if (kv) return kv;
+
+  // Nur auf Vercel (KV_REST_API_URL vorhanden)
+  if (import.meta.env.KV_REST_API_URL || process.env.KV_REST_API_URL) {
+    try {
+      const { kv: vercelKV } = await import('@vercel/kv');
+      kv = vercelKV;
+      console.log('✅ Vercel KV verbunden');
+      return kv;
+    } catch {
+      console.warn('⚠️  Vercel KV nicht verfügbar – nutze In-Memory-Store');
+    }
+  } else {
+    console.warn('⚠️  KV_REST_API_URL nicht gesetzt – nutze In-Memory-Store (lokal)');
+  }
+
+  // Fallback: In-Memory
+  kv = {
+    get:    async (key: string)                              => mem.get(key),
+    set:    async (key: string, value: string, opts?: any)   => mem.set(key, value, opts?.ex),
+    del:    async (key: string)                              => mem.del(key),
+    keys:   async (pattern: string)                          => mem.keys(pattern.replace('*', '')),
+  };
+  return kv;
+}
+
+// ─── Hilfsfunktionen ─────────────────────────────────────────────────────────
+async function kvGet(key: string): Promise<string | null> {
+  const store = await getKV();
+  const val = await store.get(key);
+  return val ? (typeof val === 'string' ? val : JSON.stringify(val)) : null;
+}
+
+async function kvSet(key: string, value: string, ttlSeconds?: number): Promise<void> {
+  const store = await getKV();
+  if (ttlSeconds) {
+    await store.set(key, value, { ex: ttlSeconds });
+  } else {
+    await store.set(key, value);
+  }
+}
+
+async function kvDel(key: string): Promise<void> {
+  const store = await getKV();
+  await store.del(key);
+}
+
+async function kvKeys(prefix: string): Promise<string[]> {
+  const store = await getKV();
+  return await store.keys(`${prefix}*`);
+}
+
+// ─── User-Funktionen ─────────────────────────────────────────────────────────
 export async function saveUser(user: User): Promise<void> {
-  const client = await getStore();
-  await client.set(`user:${user.id}`, JSON.stringify(user));
-
-  // Email-Index für schnelle Suche
-  if (user.email) {
-    await client.set(`email:${user.email}`, user.id);
-  }
-  
-  // Username-Index für schnelle Suche
-  if (user.username) {
-    await client.set(`username:${user.username.toLowerCase()}`, user.id);
-  }
+  await kvSet(`user:${user.id}`, JSON.stringify(user));
+  if (user.email)    await kvSet(`email:${user.email}`, user.id);
+  if (user.username) await kvSet(`username:${user.username.toLowerCase()}`, user.id);
 }
 
-// User abrufen
 export async function getUser(userId: string): Promise<User | null> {
-  const client = await getStore();
-  const data = await client.get(`user:${userId}`);
-  return data ? JSON.parse(data as string) : null;
+  const data = await kvGet(`user:${userId}`);
+  return data ? JSON.parse(data) : null;
 }
 
-// User per Email finden
 export async function getUserByEmail(email: string): Promise<User | null> {
-  const client = await getStore();
-  const userId = await client.get(`email:${email}`);
+  const userId = await kvGet(`email:${email}`);
   if (!userId) return null;
-  return await getUser(userId as string);
+  return await getUser(userId);
 }
 
-// User per Username finden
 export async function getUserByUsername(username: string): Promise<User | null> {
-  const client = await getStore();
-  const userId = await client.get(`username:${username.toLowerCase()}`);
+  const userId = await kvGet(`username:${username.toLowerCase()}`);
   if (!userId) return null;
-  return await getUser(userId as string);
+  return await getUser(userId);
 }
 
-// Alle User abrufen
 export async function getAllUsers(): Promise<User[]> {
-  const client = await getStore();
+  const keys = await kvKeys('user:');
   const users: User[] = [];
-  
-  // Bei InMemoryStore
-  if (client instanceof InMemoryStore) {
-    const allKeys = client.keys('user:*');
-    for (const key of allKeys) {
-      const data = await client.get(key);
-      if (data) {
-        users.push(JSON.parse(data as string));
-      }
-    }
-    return users;
-  }
-  
-  // Bei Redis
-  const keys = await client.keys('user:*');
   for (const key of keys) {
-    const data = await client.get(key);
-    if (data) {
-      users.push(JSON.parse(data as string));
-    }
+    const data = await kvGet(key);
+    if (data) users.push(JSON.parse(data));
   }
-  
   return users;
 }
 
-// Session erstellen
-// Standard: 365 Tage (1 Jahr) - User bleibt lange eingeloggt
+export async function deleteUser(userId: string): Promise<void> {
+  const user = await getUser(userId);
+  if (user?.email)    await kvDel(`email:${user.email}`);
+  if (user?.username) await kvDel(`username:${user.username.toLowerCase()}`);
+  await kvDel(`user:${userId}`);
+}
+
+// ─── Session-Funktionen ──────────────────────────────────────────────────────
 export async function createSession(
   userId: string,
   expiresInDays: number = 365,
 ): Promise<string> {
-  const client = await getStore();
-  const sessionId = crypto.randomUUID();
-  const expiresAt = Date.now() + expiresInDays * 24 * 60 * 60 * 1000;
-
-  const session: Session = {
-    userId,
-    expiresAt,
-  };
-
-  const ttl = expiresInDays * 24 * 60 * 60; // TTL in Sekunden
-  await client.set(`session:${sessionId}`, JSON.stringify(session), "EX", ttl);
-
+  const sessionId  = crypto.randomUUID();
+  const expiresAt  = Date.now() + expiresInDays * 24 * 60 * 60 * 1000;
+  const ttl        = expiresInDays * 24 * 60 * 60;
+  const session: Session = { userId, expiresAt };
+  await kvSet(`session:${sessionId}`, JSON.stringify(session), ttl);
   return sessionId;
 }
 
-// Session validieren
 export async function validateSession(sessionId: string): Promise<User | null> {
-  const client = await getStore();
-  const data = await client.get(`session:${sessionId}`);
-
+  const data = await kvGet(`session:${sessionId}`);
   if (!data) return null;
 
-  const session: Session = JSON.parse(data as string);
-
-  // Prüfe ob abgelaufen
+  const session: Session = JSON.parse(data);
   if (session.expiresAt < Date.now()) {
-    await client.del(`session:${sessionId}`);
+    await kvDel(`session:${sessionId}`);
     return null;
   }
 
   return await getUser(session.userId);
 }
 
-// Session löschen (Logout)
 export async function deleteSession(sessionId: string): Promise<void> {
-  const client = await getStore();
-  await client.del(`session:${sessionId}`);
+  await kvDel(`session:${sessionId}`);
 }
 
-// User löschen
-export async function deleteUser(userId: string): Promise<void> {
-  const client = await getStore();
-  const user = await getUser(userId);
-
-  if (user?.email) {
-    await client.del(`email:${user.email}`);
-  }
-
-  await client.del(`user:${userId}`);
-}
-
-// Admin-Check: Bestimmte Usernames oder Emails sind automatisch Admins
-const ADMIN_USERNAMES = [
-  "Wulfy",
-  "UEBlackWulfGHG",
-  "ueblackwulf",
-  "ueblackwolf",
-];
-const ADMIN_EMAILS = ["wulfghg@gmail.com", "e94111993@gmail.com"];
+// ─── Admin-Funktionen ────────────────────────────────────────────────────────
+const ADMIN_USERNAMES = ['Wulfy', 'UEBlackWulfGHG', 'ueblackwulf', 'ueblackwolf'];
+const ADMIN_EMAILS    = ['wulfghg@gmail.com', 'e94111993@gmail.com'];
 
 export function isAdminUser(username: string, email?: string): boolean {
   return (
-    ADMIN_USERNAMES.some(
-      (admin) => admin.toLowerCase() === username.toLowerCase(),
-    ) ||
-    Boolean(
-      email &&
-      ADMIN_EMAILS.some(
-        (adminEmail) => adminEmail.toLowerCase() === email.toLowerCase(),
-      ),
-    )
+    ADMIN_USERNAMES.some(a => a.toLowerCase() === username.toLowerCase()) ||
+    Boolean(email && ADMIN_EMAILS.some(a => a.toLowerCase() === email.toLowerCase()))
   );
 }
 
-// User zu Admin machen
-export async function setAdmin(
-  userId: string,
-  isAdmin: boolean = true,
-): Promise<void> {
+export async function setAdmin(userId: string, isAdmin: boolean = true): Promise<void> {
   const user = await getUser(userId);
   if (user) {
     user.isAdmin = isAdmin;
@@ -240,37 +188,26 @@ export async function setAdmin(
   }
 }
 
-// E-Mail-Verifikationstoken erstellen
-export async function createEmailVerificationToken(
-  userId: string,
-): Promise<string> {
-  const client = await getStore();
+// ─── E-Mail-Verifikation ─────────────────────────────────────────────────────
+export async function createEmailVerificationToken(userId: string): Promise<string> {
   const token = crypto.randomUUID();
-  const ttl = 24 * 60 * 60; // 24 Stunden
-  await client.set(`email-verify:${token}`, userId, "EX", ttl);
+  await kvSet(`email-verify:${token}`, userId, 24 * 60 * 60);
   return token;
 }
 
-// E-Mail-Verifikationstoken validieren
 export async function verifyEmailToken(token: string): Promise<User | null> {
-  const client = await getStore();
-  const userId = (await client.get(`email-verify:${token}`)) as string | null;
+  const userId = await kvGet(`email-verify:${token}`);
   if (!userId) return null;
 
   const user = await getUser(userId);
   if (!user) return null;
 
-  // E-Mail als verifiziert markieren
   user.emailVerified = true;
   await saveUser(user);
-
-  // Token löschen
-  await client.del(`email-verify:${token}`);
-
+  await kvDel(`email-verify:${token}`);
   return user;
 }
 
-// E-Mail als verifiziert markieren
 export async function markEmailVerified(userId: string): Promise<void> {
   const user = await getUser(userId);
   if (user) {
@@ -279,51 +216,29 @@ export async function markEmailVerified(userId: string): Promise<void> {
   }
 }
 
-// Passwort-Reset-Token erstellen
-export async function createPasswordResetToken(
-  email: string,
-): Promise<string | null> {
-  const client = await getStore();
+// ─── Passwort-Reset ──────────────────────────────────────────────────────────
+export async function createPasswordResetToken(email: string): Promise<string | null> {
   const user = await getUserByEmail(email);
   if (!user) return null;
 
   const token = crypto.randomUUID();
-  const ttl = 60 * 60; // 1 Stunde
-  await client.set(`password-reset:${token}`, user.id, "EX", ttl);
-
+  await kvSet(`password-reset:${token}`, user.id, 60 * 60);
   return token;
 }
 
-// Passwort-Reset-Token validieren
-export async function validatePasswordResetToken(
-  token: string,
-): Promise<string | null> {
-  const client = await getStore();
-  const userId = (await client.get(`password-reset:${token}`)) as string | null;
-  return userId;
+export async function validatePasswordResetToken(token: string): Promise<string | null> {
+  return await kvGet(`password-reset:${token}`);
 }
 
-// Passwort zurücksetzen
-export async function resetPassword(
-  token: string,
-  newPasswordHash: string,
-): Promise<User | null> {
-  const client = await getStore();
+export async function resetPassword(token: string, newPasswordHash: string): Promise<User | null> {
   const userId = await validatePasswordResetToken(token);
   if (!userId) return null;
 
   const user = await getUser(userId);
   if (!user) return null;
 
-  // Passwort aktualisieren
   user.password = newPasswordHash;
   await saveUser(user);
-
-  // Token löschen
-  await client.del(`password-reset:${token}`);
-
+  await kvDel(`password-reset:${token}`);
   return user;
 }
-
-// Store sofort initialisieren beim Modul-Import
-getStore();

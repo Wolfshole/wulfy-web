@@ -101,11 +101,43 @@ if (sessionId) {
     .btn-profile:hover {
       background: #4a90e2;
       color: #fff;
+    }
+
+    /* ── Dark Mode Toggle ── */
+    .btn-darkmode {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-darkmode:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    .btn-darkmode .icon-sun  { display: none; }
+    .btn-darkmode .icon-moon { display: block; }
+    body.dark-mode .btn-darkmode .icon-sun  { display: block; }
+    body.dark-mode .btn-darkmode .icon-moon { display: none; }
   </style>
 </head>
 <body>
   <!-- Auth Navigation -->
   <div class="auth-nav">
+
+    <!-- Dark Mode Button -->
+    <button class="btn-darkmode" id="darkToggle" title="Dark Mode umschalten">
+      <span class="icon-moon">🌙</span>
+      <span class="icon-sun">☀️</span>
+    </button>
+
     {!user && (
     <div id="auth-buttons">
       <a href="/login" class="btn-login">Anmelden</a>
@@ -129,7 +161,14 @@ if (sessionId) {
   <script>
     // Navigation wird jetzt serverseitig gerendert
     // Kein LocalStorage-Check mehr nötig
-    
+
+    // Dark Mode Toggle
+    const darkToggle = document.getElementById('darkToggle');
+    darkToggle?.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    });
+
     // Theme Toggle (falls vorhanden)
     const themeToggle = document.getElementById('nightModeBtn');
     if (themeToggle) {
