@@ -1,5 +1,4 @@
-// Datenspeicherung: Vercel KV (Produktion) oder In-Memory (lokal)
-// Kein ioredis nötig!
+// Datenspeicherung: Upstash Redis (Produktion) oder In-Memory (lokal)
 
 export interface User {
   id: string;
@@ -42,45 +41,47 @@ const mem = {
     [...memStore.keys()].filter(k => k.startsWith(prefix)),
 };
 
-// ─── Vercel KV (Produktion) ──────────────────────────────────────────────────
-let kv: any = null;
+// ─── Upstash Redis (Produktion) ──────────────────────────────────────────────
+let redis: any = null;
 
-async function getKV() {
-  if (kv) return kv;
+async function getRedis() {
+  if (redis) return redis;
 
-  // Nur auf Vercel (KV_REST_API_URL vorhanden)
-  if (import.meta.env.KV_REST_API_URL || process.env.KV_REST_API_URL) {
+  const url   = process.env.wulfyweb_KV_REST_API_URL   || import.meta.env.wulfyweb_KV_REST_API_URL;
+  const token = process.env.wulfyweb_KV_REST_API_TOKEN || import.meta.env.wulfyweb_KV_REST_API_TOKEN;
+
+  if (url && token) {
     try {
-      const { kv: vercelKV } = await import('@vercel/kv');
-      kv = vercelKV;
-      console.log('✅ Vercel KV verbunden');
-      return kv;
+      const { Redis } = await import('@upstash/redis');
+      redis = new Redis({ url, token });
+      console.log('✅ Upstash Redis verbunden');
+      return redis;
     } catch {
-      console.warn('⚠️  Vercel KV nicht verfügbar – nutze In-Memory-Store');
+      console.warn('⚠️ Upstash Redis nicht verfügbar – nutze In-Memory-Store');
     }
   } else {
-    console.warn('⚠️  KV_REST_API_URL nicht gesetzt – nutze In-Memory-Store (lokal)');
+    console.warn('⚠️ wulfyweb_KV_REST_API_URL nicht gesetzt – nutze In-Memory-Store (lokal)');
   }
 
   // Fallback: In-Memory
-  kv = {
-    get:    async (key: string)                              => mem.get(key),
-    set:    async (key: string, value: string, opts?: any)   => mem.set(key, value, opts?.ex),
-    del:    async (key: string)                              => mem.del(key),
-    keys:   async (pattern: string)                          => mem.keys(pattern.replace('*', '')),
+  redis = {
+    get:    async (key: string)                            => mem.get(key),
+    set:    async (key: string, value: string, opts?: any) => mem.set(key, value, opts?.ex),
+    del:    async (key: string)                            => mem.del(key),
+    keys:   async (pattern: string)                        => mem.keys(pattern.replace('*', '')),
   };
-  return kv;
+  return redis;
 }
 
 // ─── Hilfsfunktionen ─────────────────────────────────────────────────────────
 async function kvGet(key: string): Promise<string | null> {
-  const store = await getKV();
+  const store = await getRedis();
   const val = await store.get(key);
   return val ? (typeof val === 'string' ? val : JSON.stringify(val)) : null;
 }
 
 async function kvSet(key: string, value: string, ttlSeconds?: number): Promise<void> {
-  const store = await getKV();
+  const store = await getRedis();
   if (ttlSeconds) {
     await store.set(key, value, { ex: ttlSeconds });
   } else {
@@ -89,12 +90,12 @@ async function kvSet(key: string, value: string, ttlSeconds?: number): Promise<v
 }
 
 async function kvDel(key: string): Promise<void> {
-  const store = await getKV();
+  const store = await getRedis();
   await store.del(key);
 }
 
 async function kvKeys(prefix: string): Promise<string[]> {
-  const store = await getKV();
+  const store = await getRedis();
   return await store.keys(`${prefix}*`);
 }
 
@@ -144,9 +145,9 @@ export async function createSession(
   userId: string,
   expiresInDays: number = 365,
 ): Promise<string> {
-  const sessionId  = crypto.randomUUID();
-  const expiresAt  = Date.now() + expiresInDays * 24 * 60 * 60 * 1000;
-  const ttl        = expiresInDays * 24 * 60 * 60;
+  const sessionId = crypto.randomUUID();
+  const expiresAt = Date.now() + expiresInDays * 24 * 60 * 60 * 1000;
+  const ttl       = expiresInDays * 24 * 60 * 60;
   const session: Session = { userId, expiresAt };
   await kvSet(`session:${sessionId}`, JSON.stringify(session), ttl);
   return sessionId;
