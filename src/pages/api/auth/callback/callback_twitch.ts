@@ -22,7 +22,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         client_secret: import.meta.env.TWITCH_CLIENT_SECRET,
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: `${url.origin}/api/auth/callback/twitch`
+        redirect_uri: `import.meta.env.PUBLIC_TWITCH_REDIRECT_URI`
       })
     });
     

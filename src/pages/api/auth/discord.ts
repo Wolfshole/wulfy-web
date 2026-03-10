@@ -1,9 +1,8 @@
-// Startet den Discord OAuth Login
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ redirect }) => {
   const clientId    = import.meta.env.DISCORD_CLIENT_ID;
-  const redirectUri = import.meta.env.DISCORD_REDIRECT_URI;
+  const redirectUri = import.meta.env.PUBLIC_DISCORD_REDIRECT_URI;
 
   if (!clientId || !redirectUri) {
     return redirect('/login?error=oauth_not_configured');

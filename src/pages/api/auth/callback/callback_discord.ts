@@ -29,7 +29,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   // Prüfe Environment Variables
   const clientId = import.meta.env.DISCORD_CLIENT_ID;
   const clientSecret = import.meta.env.DISCORD_CLIENT_SECRET;
-  const redirectUri = import.meta.env.DISCORD_REDIRECT_URI;
+  const redirectUri = import.meta.env.PUBLIC_DISCORD_REDIRECT_URI;
   
   if (!clientId || !clientSecret || !redirectUri) {
     console.error('Discord OAuth not configured - missing environment variables');

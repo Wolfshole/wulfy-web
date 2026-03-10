@@ -18,11 +18,11 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        client_id: import.meta.env.GOOGLE_CLIENT_ID,
+        client_id: import.meta.env.PUBLIC_GOOGLE_CLIENT_ID,
         client_secret: import.meta.env.GOOGLE_CLIENT_SECRET,
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: `${url.origin}/api/auth/callback/google`
+        redirect_uri: `import.meta.env.PUBLIC_GOOGLE_REDIRECT_URI`
       })
     });
     
