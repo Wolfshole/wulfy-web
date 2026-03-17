@@ -22,7 +22,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         client_secret: import.meta.env.TWITCH_CLIENT_SECRET,
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: `import.meta.env.PUBLIC_TWITCH_REDIRECT_URI`
+        redirect_uri: import.meta.env.PUBLIC_TWITCH_REDIRECT_URI  // ✅ Fix: kein Template-String
       })
     });
     
@@ -46,7 +46,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         id: `twitch_${twitchUser.id}`,
         username: twitchUser.display_name,
         email: twitchUser.email,
-        emailVerified: true, // Twitch-E-Mails sind bereits verifiziert
+        emailVerified: true,
         avatar: twitchUser.profile_image_url,
         provider: 'twitch',
         isAdmin: false,
@@ -59,9 +59,9 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
     cookies.set('session_id', sessionId, {
       path: '/',
       httpOnly: true,
-      secure: true,
+      secure: import.meta.env.PROD,
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 365 // 1 Jahr
+      maxAge: 60 * 60 * 24 * 365
     });
     
     return redirect('/dashboard');

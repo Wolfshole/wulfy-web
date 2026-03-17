@@ -18,11 +18,11 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        client_id: import.meta.env.PUBLIC_GOOGLE_CLIENT_ID,
+        client_id: import.meta.env.GOOGLE_CLIENT_ID,           // ✅ Fix: kein PUBLIC_
         client_secret: import.meta.env.GOOGLE_CLIENT_SECRET,
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: `import.meta.env.PUBLIC_GOOGLE_REDIRECT_URI`
+        redirect_uri: import.meta.env.PUBLIC_GOOGLE_REDIRECT_URI  // ✅ Fix: kein Template-String
       })
     });
     
@@ -45,7 +45,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
         id: `google_${googleUser.id}`,
         username: googleUser.name,
         email: googleUser.email,
-        emailVerified: true, // Google-E-Mails sind bereits verifiziert
+        emailVerified: true,
         avatar: googleUser.picture,
         provider: 'google',
         isAdmin: isAdminUser(googleUser.name, googleUser.email),
@@ -61,9 +61,9 @@ export const GET: APIRoute = async ({ request, redirect, cookies }) => {
     cookies.set('session_id', sessionId, {
       path: '/',
       httpOnly: true,
-      secure: true,
+      secure: import.meta.env.PROD,
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 365 // 1 Jahr
+      maxAge: 60 * 60 * 24 * 365
     });
     
     return redirect('/dashboard');
