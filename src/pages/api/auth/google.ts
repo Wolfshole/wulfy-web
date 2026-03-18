@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ redirect }) => {
-  const clientId    = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID;
-  const redirectUri = import.meta.env.PUBLIC_GOOGLE_REDIRECT_URI;
+  const clientId    = import.meta.env.GOOGLE_CLIENT_ID;
+  const redirectUri = import.meta.env.GOOGLE_REDIRECT_URI;
 
   if (!clientId || !redirectUri) {
     return redirect('/login?error=oauth_not_configured');

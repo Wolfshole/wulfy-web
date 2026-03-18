@@ -5,67 +5,68 @@ import { saveUser, getUserByEmail, createSession, isAdminUser } from '../../../.
 export const GET: APIRoute = async ({ request, redirect, cookies }) => {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
-  
+
   if (!code) {
     return redirect('/login?error=oauth_failed');
   }
-  
+
+  const clientId     = import.meta.env.GOOGLE_CLIENT_ID;
+  const clientSecret = import.meta.env.GOOGLE_CLIENT_SECRET;
+  const redirectUri  = import.meta.env.GOOGLE_REDIRECT_URI;
+
+  if (!clientId || !clientSecret || !redirectUri) {
+    return redirect('/login?error=oauth_not_configured');
+  }
+
   try {
-    // Token austauschen
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        client_id: import.meta.env.GOOGLE_CLIENT_ID,           // ✅ Fix: kein PUBLIC_
-        client_secret: import.meta.env.GOOGLE_CLIENT_SECRET,
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: import.meta.env.PUBLIC_GOOGLE_REDIRECT_URI  // ✅ Fix: kein Template-String
+        client_id:     clientId,
+        client_secret: clientSecret,
+        grant_type:    'authorization_code',
+        code:          code,
+        redirect_uri:  redirectUri
       })
     });
-    
+
     const tokens = await tokenResponse.json();
-    
-    // Benutzerdaten abrufen
+
     const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: {
-        Authorization: `Bearer ${tokens.access_token}`
-      }
+      headers: { Authorization: `Bearer ${tokens.access_token}` }
     });
-    
+
     const googleUser = await userResponse.json();
-    
-    // Prüfe ob User bereits existiert
+
     let user = await getUserByEmail(googleUser.email);
-    
+
     if (!user) {
       user = {
-        id: `google_${googleUser.id}`,
-        username: googleUser.name,
-        email: googleUser.email,
+        id:            `google_${googleUser.id}`,
+        username:      googleUser.name,
+        email:         googleUser.email,
         emailVerified: true,
-        avatar: googleUser.picture,
-        provider: 'google',
-        isAdmin: isAdminUser(googleUser.name, googleUser.email),
-        createdAt: new Date().toISOString()
+        avatar:        googleUser.picture,
+        provider:      'google',
+        isAdmin:       isAdminUser(googleUser.name, googleUser.email),
+        createdAt:     new Date().toISOString()
       };
       await saveUser(user);
     } else {
       user.isAdmin = isAdminUser(user.username, user.email);
       await saveUser(user);
     }
-    
+
     const sessionId = await createSession(user.id, 365);
     cookies.set('session_id', sessionId, {
-      path: '/',
+      path:     '/',
       httpOnly: true,
-      secure: import.meta.env.PROD,
+      secure:   import.meta.env.PROD,
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 365
+      maxAge:   60 * 60 * 24 * 365
     });
-    
+
     return redirect('/dashboard');
   } catch (error) {
     console.error('Google OAuth error:', error);
